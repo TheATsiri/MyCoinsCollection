@@ -171,7 +171,7 @@ git push -u origin main
 
 Subsequent pushes rebuild the frontend. Coin edits do not rebuild it. Review code through branch previews. Apply backward-compatible database migrations before deploying code that depends on them.
 
-No cloud projects or repository were created by this implementation. Account setup and production deployment require your own accounts.
+Production is deployed at https://mycoinscollection.pages.dev from https://github.com/TheATsiri/MyCoinsCollection. Cloudflare builds the `main` branch automatically. Supabase project `bwndmbfjyifrzfomjxvg` provides the live catalogue and photo storage; demonstration mode is disabled. No genuine coin records have been added yet.
 
 ## Maintenance and recovery
 
