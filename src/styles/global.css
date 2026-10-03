@@ -1582,3 +1582,130 @@ main:focus {
     transform: none;
   }
 }
+
+/* Language control stays at the right edge of the header on every screen. */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.language-selector {
+  position: relative;
+}
+.language-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 14px;
+}
+.language-selector img {
+  width: 26px;
+  height: 18px;
+  object-fit: cover;
+  border: 1px solid #0002;
+  flex-shrink: 0;
+}
+.language-options {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 180px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 8px 24px #283e3320;
+  z-index: 30;
+}
+.language-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 10px;
+  text-align: left;
+  font-size: 14px;
+  min-height: 44px;
+}
+.language-option[aria-pressed='true'],
+.language-option:hover {
+  background: #e9ecdf;
+}
+.language-option > svg {
+  margin-left: auto;
+}
+.header-inner > .brand {
+  white-space: normal;
+  min-width: 0;
+}
+.header-inner > .brand small {
+  line-height: 1.5;
+}
+@media (max-width: 1100px) {
+  .header-inner {
+    gap: 16px;
+  }
+  .header-explore {
+    display: none;
+  }
+  .header-inner nav {
+    gap: 20px;
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 800px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    height: auto;
+    padding-block: 16px 10px;
+    gap: 12px;
+  }
+  .header-inner > .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .header-actions {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .header-inner nav {
+    grid-column: 1/-1;
+    grid-row: 2;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    font-size: 14px;
+  }
+  .header-inner > .brand {
+    font-size: 19px;
+    gap: 10px;
+  }
+  .header-inner > .brand .brand-icon {
+    flex-shrink: 0;
+  }
+  .header-inner > .brand small {
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+}
+@media (max-width: 380px) {
+  .language-code {
+    display: none;
+  }
+}
+
+.hero-copy {
+  min-width: 0;
+}
+h1,
+h2,
+h3 {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}

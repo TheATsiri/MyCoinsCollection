@@ -1,9 +1,12 @@
+import { useLanguage } from '../i18n/useLanguage'
 import { useState } from 'react'
 import { ArrowUpRight, Repeat2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Coin } from '../types/coin'
 import { imageUrl } from '../lib/supabase'
 export default function CoinCard({ coin }: { coin: Coin }) {
+  const { t } = useLanguage()
+
   const [failedPath, setFailedPath] = useState<string | null>(null)
   const [side, setSide] = useState<'obverse' | 'reverse'>('obverse')
   const image =
@@ -23,11 +26,13 @@ export default function CoinCard({ coin }: { coin: Coin }) {
             />
           ) : (
             <span className="photo-placeholder">
-              {image ? 'Photograph unavailable' : 'Photograph to come'}
+              {image ? t('Photograph unavailable') : t('Photograph to come')}
             </span>
           )}
         </Link>
-        <span className="side-label">{image?.side ?? 'No image'}</span>
+        <span className="side-label">
+          {image ? t(image.side) : t('No image')}
+        </span>
         {coin.coin_images.some((i) => i.side === 'reverse') &&
           coin.coin_images.some((i) => i.side === 'obverse') && (
             <button
@@ -35,12 +40,10 @@ export default function CoinCard({ coin }: { coin: Coin }) {
               onClick={() =>
                 setSide(side === 'obverse' ? 'reverse' : 'obverse')
               }
-              aria-label={
-                'Show ' +
-                (side === 'obverse' ? 'reverse' : 'obverse') +
-                ' of ' +
-                coin.name
-              }
+              aria-label={t('Show {side} of {name}', {
+                side: t(side === 'obverse' ? 'reverse' : 'obverse'),
+                name: coin.name,
+              })}
             >
               <Repeat2 size={16} />
             </button>
@@ -49,7 +52,7 @@ export default function CoinCard({ coin }: { coin: Coin }) {
       <div className="coin-card-copy">
         <div className="coin-eyebrow">
           {coin.issuing_authority}
-          <span>{coin.year ?? 'Undated'}</span>
+          <span>{coin.year ?? t('Undated')}</span>
         </div>
         <h3>
           <Link to={'/coins/' + coin.slug}>
@@ -58,9 +61,9 @@ export default function CoinCard({ coin }: { coin: Coin }) {
           </Link>
         </h3>
         <p>
-          {coin.denomination ?? 'Denomination unknown'}
+          {coin.denomination ?? t('Denomination unknown')}
           <span>·</span>
-          {coin.metal ?? 'Metal unknown'}
+          {coin.metal ?? t('Metal unknown')}
         </p>
       </div>
     </article>

@@ -1,3 +1,4 @@
+import { useLanguage } from '../i18n/useLanguage'
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import type { CoinImage } from '../types/coin'
@@ -11,6 +12,8 @@ export default function Lightbox({
   start: number
   onClose: () => void
 }) {
+  const { t } = useLanguage()
+
   const [index, setIndex] = useState(start),
     ref = useRef<HTMLDialogElement>(null)
   const image = images[index]
@@ -32,7 +35,7 @@ export default function Lightbox({
     <dialog
       ref={ref}
       className="lightbox"
-      aria-label="Enlarged coin photograph"
+      aria-label={t('Enlarged coin photograph')}
       onCancel={(e) => {
         e.preventDefault()
         onClose()
@@ -70,14 +73,14 @@ export default function Lightbox({
       <button
         className="lightbox-close icon-button"
         onClick={onClose}
-        aria-label="Close image viewer"
+        aria-label={t('Close image viewer')}
       >
         <X />
       </button>
       <div className="lightbox-content">
         <img src={imageUrl(image.image_path)} alt={image.alt_text} />
         <p>
-          {image.side} · {index + 1} / {images.length}
+          {t(image.side)} · {index + 1} / {images.length}
         </p>
         {image.credit && <small>{image.credit}</small>}
       </div>
@@ -85,14 +88,14 @@ export default function Lightbox({
         <>
           <button
             className="lightbox-prev icon-button"
-            aria-label="Previous image"
+            aria-label={t('Previous image')}
             onClick={() => move(-1)}
           >
             <ChevronLeft />
           </button>
           <button
             className="lightbox-next icon-button"
-            aria-label="Next image"
+            aria-label={t('Next image')}
             onClick={() => move(1)}
           >
             <ChevronRight />

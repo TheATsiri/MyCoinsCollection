@@ -1,3 +1,4 @@
+import { useLanguage } from '../i18n/useLanguage'
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -16,6 +17,8 @@ function Photograph({
   image: CoinImage
   onOpen: () => void
 }) {
+  const { t } = useLanguage()
+
   const [failed, setFailed] = useState(false)
   return (
     <div className="detail-photo">
@@ -25,10 +28,10 @@ function Photograph({
           onOpen()
         }}
         disabled={failed}
-        aria-label={'Enlarge ' + image.side + ' photograph'}
+        aria-label={t('Enlarge {side} photograph', { side: t(image.side) })}
       >
         {failed ? (
-          <span>Photograph unavailable</span>
+          <span>{t('Photograph unavailable')}</span>
         ) : (
           <img
             src={imageUrl(image.image_path)}
@@ -41,13 +44,15 @@ function Photograph({
         </span>
       </button>
       <div className="photo-caption">
-        <span>{image.side}</span>
+        <span>{t(image.side)}</span>
         <small>{image.credit}</small>
       </div>
     </div>
   )
 }
 export default function Details() {
+  const { t, language } = useLanguage()
+
   const { slug = '' } = useParams(),
     query = useQuery({
       queryKey: ['coin', slug],
@@ -91,28 +96,29 @@ export default function Details() {
     <section className="container detail-section">
       <Link to="/collection" className="text-link back-link">
         <ArrowLeft size={17} />
-        Back to the collection
+        {t('Back to the collection')}
       </Link>
       <div className="detail-title">
         <div>
           <p className="eyebrow">
-            {c.issuing_authority} · {c.year ?? 'UNDATED'}
+            {c.issuing_authority} · {c.year ?? t('UNDATED')}
           </p>
           <h1>{c.name}</h1>
           <p>
-            {c.denomination ?? 'Denomination not recorded'}
+            {c.denomination ?? t('Denomination not recorded')}
             {c.metal && ' · ' + c.metal}
           </p>
         </div>
         <span className="specimen-label">
           <Check size={16} />
-          Catalogue specimen
+          {t('Catalogue specimen')}
         </span>
       </div>
       {isDemo && (
         <div className="detail-demo">
-          Demonstration record. The artwork is illustrative and does not
-          identify or grade a real coin.
+          {t(
+            'Demonstration record. The artwork is illustrative and does not identify or grade a real coin.',
+          )}
         </div>
       )}
       <div className="detail-images">
@@ -123,25 +129,25 @@ export default function Details() {
         ) : (
           <div className="empty-state">
             <Coins />
-            <p>Photographs have not been added yet.</p>
+            <p>{t('Photographs have not been added yet.')}</p>
           </div>
         )}
       </div>
       <div className="detail-body">
         <section>
-          <p className="eyebrow">A CLOSER LOOK</p>
-          <h2>The details</h2>
+          <p className="eyebrow">{t('A CLOSER LOOK')}</p>
+          <h2>{t('The details')}</h2>
           <dl className="specifications">
             {attributes.map(([label, value]) => (
               <div key={label}>
-                <dt>{label}</dt>
-                <dd>{value ?? 'Not recorded'}</dd>
+                <dt>{t(label)}</dt>
+                <dd>{value ?? t('Not recorded')}</dd>
               </div>
             ))}
           </dl>
           {Object.keys(c.extra_attributes).length > 0 && (
             <>
-              <h3>Additional specifications</h3>
+              <h3>{t('Additional specifications')}</h3>
               <dl className="specifications">
                 {Object.entries(c.extra_attributes).map(([key, value]) => (
                   <div key={key}>
@@ -149,7 +155,7 @@ export default function Details() {
                     <dd>
                       {typeof value === 'object'
                         ? JSON.stringify(value)
-                        : String(value ?? 'Not recorded')}
+                        : String(value ?? t('Not recorded'))}
                     </dd>
                   </div>
                 ))}
@@ -158,15 +164,17 @@ export default function Details() {
           )}
         </section>
         <section className="detail-notes">
-          <p className="eyebrow">DESIGN & HISTORY</p>
-          <h2>Behind the surface</h2>
-          <h3>Obverse</h3>
-          <p>{c.obverse_description ?? 'Description not yet recorded.'}</p>
-          <h3>Reverse</h3>
-          <p>{c.reverse_description ?? 'Description not yet recorded.'}</p>
-          <h3>Historical notes</h3>
-          <p>{c.historical_notes ?? 'Historical notes have not been added.'}</p>
-          <h3>Catalogue references</h3>
+          <p className="eyebrow">{t('DESIGN & HISTORY')}</p>
+          <h2>{t('Behind the surface')}</h2>
+          <h3>{t('Obverse')}</h3>
+          <p>{c.obverse_description ?? t('Description not yet recorded.')}</p>
+          <h3>{t('Reverse')}</h3>
+          <p>{c.reverse_description ?? t('Description not yet recorded.')}</p>
+          <h3>{t('Historical notes')}</h3>
+          <p>
+            {c.historical_notes ?? t('Historical notes have not been added.')}
+          </p>
+          <h3>{t('Catalogue references')}</h3>
           {c.coin_references.length ? (
             <ul>
               {c.coin_references.map((r) => (
@@ -175,7 +183,7 @@ export default function Details() {
                   {r.edition && ' (' + r.edition + ')'}
                   {r.source_url && /^https?:\/\//.test(r.source_url) && (
                     <a href={r.source_url} target="_blank" rel="noreferrer">
-                      Source
+                      {t('Source')}
                       <ArrowUpRight size={13} />
                     </a>
                   )}
@@ -183,11 +191,11 @@ export default function Details() {
               ))}
             </ul>
           ) : (
-            <p>No verified references recorded.</p>
+            <p>{t('No verified references recorded.')}</p>
           )}
           <p className="catalogued-note">
-            Added to the catalogue:{' '}
-            {new Intl.DateTimeFormat('en', {
+            {t('Added to the catalogue:')}{' '}
+            {new Intl.DateTimeFormat(language, {
               dateStyle: 'long',
               timeZone: 'UTC',
             }).format(new Date(c.catalogued_at))}

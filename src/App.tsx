@@ -1,3 +1,5 @@
+import LanguageSelector from './components/LanguageSelector'
+import { useLanguage } from './i18n/useLanguage'
 import { useEffect } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { ArrowUpRight, Coins } from 'lucide-react'
@@ -8,18 +10,23 @@ import Details from './pages/Details'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
 function Logo() {
+  const { t } = useLanguage()
+
   return (
-    <Link to="/" className="brand" aria-label="My Coin Collection home">
+    <Link to="/" className="brand" aria-label={t('My Coin Collection home')}>
       <span className="brand-icon">
         <Coins size={26} strokeWidth={1.3} />
       </span>
       <span>
-        My Coin Collection<small>A PERSONAL NUMISMATIC JOURNEY</small>
+        {t('My Coin Collection')}
+        <small>{t('A PERSONAL NUMISMATIC JOURNEY')}</small>
       </span>
     </Link>
   )
 }
 export default function App() {
+  const { t } = useLanguage()
+
   const location = useLocation()
   useEffect(() => {
     document.getElementById('main')?.focus()
@@ -28,28 +35,33 @@ export default function App() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to content
+        {t('Skip to content')}
       </a>
       {isDemo && (
         <div className="demo-bar">
-          <span>DESIGN PREVIEW</span>Example records & illustrated coins · Your
-          collection will connect through Supabase
+          <span>{t('DESIGN PREVIEW')}</span>
+          {t(
+            'Example records & illustrated coins · Your collection will connect through Supabase',
+          )}
         </div>
       )}
       <header className="site-header">
         <div className="container header-inner">
           <Logo />
-          <nav aria-label="Main navigation">
+          <nav aria-label={t('Main navigation')}>
             <NavLink to="/" end>
-              Home
+              {t('Home')}
             </NavLink>
-            <NavLink to="/collection">The collection</NavLink>
-            <NavLink to="/about">About</NavLink>
+            <NavLink to="/collection">{t('The collection')}</NavLink>
+            <NavLink to="/about">{t('About')}</NavLink>
           </nav>
-          <Link to="/collection" className="header-explore">
-            Explore
-            <ArrowUpRight size={17} />
-          </Link>
+          <div className="header-actions">
+            <Link to="/collection" className="header-explore">
+              {t('Explore')}
+              <ArrowUpRight size={17} />
+            </Link>
+            <LanguageSelector />
+          </div>
         </div>
       </header>
       <main id="main" tabIndex={-1}>
@@ -68,19 +80,21 @@ export default function App() {
         <div className="container footer-top">
           <Logo />
           <p>
-            A small museum of stories.
+            {t('A small museum of stories.')}
             <br />
-            Collected with curiosity.
+            {t('Collected with curiosity.')}
           </p>
           <Link className="text-link" to="/collection">
-            Explore the cabinet
+            {t('Explore the cabinet')}
             <ArrowUpRight size={16} />
           </Link>
         </div>
         <div className="container footer-bottom">
-          <span>© {new Date().getFullYear()} My Coin Collection</span>
-          <span>History is in the details.</span>
-          <Link to="/about">About this collection</Link>
+          <span>
+            © {new Date().getFullYear()} {t('My Coin Collection')}
+          </span>
+          <span>{t('History is in the details.')}</span>
+          <Link to="/about">{t('About this collection')}</Link>
         </div>
       </footer>
     </>

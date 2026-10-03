@@ -1,3 +1,4 @@
+import { useLanguage } from '../i18n/useLanguage'
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -18,6 +19,8 @@ import { PAGE_SIZE } from '../types/coin'
 import type { CoinFilters } from '../types/coin'
 import { Cards, ErrorState, LoadingGrid } from '../components/States'
 export default function Collection() {
+  const { t } = useLanguage()
+
   useTitle('The collection')
   const [params, setParams] = useSearchParams(),
     { filters, sort, page } = readSearch(params),
@@ -29,7 +32,7 @@ export default function Collection() {
     queryFn: getFilterOptions,
   })
   const query = useQuery({
-    queryKey: ['coins', effective, sort, page],
+    queryKey: [t('coins'), effective, sort, page],
     queryFn: () => listCoins(effective, sort, page),
     enabled: !yearError,
   })
@@ -51,12 +54,12 @@ export default function Collection() {
   )
   const select = (key: keyof CoinFilters, label: string, values: string[]) => (
     <label className="filter-field" key={key}>
-      {label}
+      {t(label)}
       <select
         value={filters[key]}
         onChange={(e) => change(key, e.target.value)}
       >
-        <option value="">All {label.toLowerCase()}</option>
+        <option value="">{t('All ' + label)}</option>
         {[...new Set([...values, ...(filters[key] ? [filters[key]] : [])])].map(
           (v) => (
             <option key={v}>{v}</option>
@@ -76,21 +79,22 @@ export default function Collection() {
   return (
     <section className="container collection-section">
       <div className="page-intro">
-        <p className="eyebrow">THE COLLECTION</p>
-        <h1>A world, one coin at a time.</h1>
+        <p className="eyebrow">{t('THE COLLECTION')}</p>
+        <h1>{t('A world, one coin at a time.')}</h1>
         <p>
-          Browse the cabinet. Follow a country, a year, or simply your
-          curiosity.
+          {t(
+            'Browse the cabinet. Follow a country, a year, or simply your curiosity.',
+          )}
         </p>
       </div>
       <div className="catalogue-toolbar">
         <label className="search-field">
           <Search size={20} />
-          <span className="sr-only">Search the collection</span>
+          <span className="sr-only">{t('Search the collection')}</span>
           <input
             value={filters.q}
             onChange={(e) => change('q', e.target.value)}
-            placeholder="Search coins, countries, stories…"
+            placeholder={t('Search coins, countries, stories…')}
             type="search"
           />
         </label>
@@ -101,7 +105,7 @@ export default function Collection() {
           onClick={() => setShowFilters(!showFilters)}
         >
           <SlidersHorizontal size={18} />
-          Filters {active.length > 0 && <span>{active.length}</span>}
+          {t('Filters')} {active.length > 0 && <span>{active.length}</span>}
         </button>
       </div>
       <div className="catalogue-layout">
@@ -110,27 +114,29 @@ export default function Collection() {
           className={'filters ' + (showFilters ? 'filters-open' : '')}
         >
           <div className="filter-heading">
-            <h2>Refine your discoveries</h2>
+            <h2>{t('Refine your discoveries')}</h2>
             <button className="text-link" onClick={clear}>
-              Reset
+              {t('Reset')}
             </button>
           </div>
           {options.isError && (
             <p className="inline-error">
-              Filter choices could not load.{' '}
-              <button onClick={() => void options.refetch()}>Retry</button>
+              {t('Filter choices could not load.')}{' '}
+              <button onClick={() => void options.refetch()}>
+                {t('Retry')}
+              </button>
             </p>
           )}
           {select('country', 'Countries / authorities', choices.countries)}
           <fieldset className="year-fields">
-            <legend>Minting year</legend>
+            <legend>{t('Minting year')}</legend>
             <label>
-              <span className="sr-only">From year</span>
+              <span className="sr-only">{t('From year')}</span>
               <input
                 aria-invalid={!!yearError}
                 aria-describedby={yearError ? 'year-error' : undefined}
                 inputMode="numeric"
-                placeholder="From"
+                placeholder={t('From')}
                 value={filters.yearFrom}
                 onChange={(e) => change('yearFrom', e.target.value)}
                 maxLength={4}
@@ -138,12 +144,12 @@ export default function Collection() {
             </label>
             <span>–</span>
             <label>
-              <span className="sr-only">To year</span>
+              <span className="sr-only">{t('To year')}</span>
               <input
                 aria-invalid={!!yearError}
                 aria-describedby={yearError ? 'year-error' : undefined}
                 inputMode="numeric"
-                placeholder="To"
+                placeholder={t('To')}
                 value={filters.yearTo}
                 onChange={(e) => change('yearTo', e.target.value)}
                 maxLength={4}
@@ -157,8 +163,9 @@ export default function Collection() {
           <div className="filter-note">
             <BookOpen size={18} />
             <p>
-              A catalogue of individual specimens. Unknown details are left
-              open, never guessed.
+              {t(
+                'A catalogue of individual specimens. Unknown details are left open, never guessed.',
+              )}
             </p>
           </div>
         </aside>
@@ -166,26 +173,27 @@ export default function Collection() {
           <div className="results-topline">
             <p aria-live="polite">
               {query.isPending ? (
-                'Discovering…'
+                t('Discovering…')
               ) : query.isError ? (
-                'Catalogue unavailable'
+                t('Catalogue unavailable')
               ) : (
                 <>
                   <strong>{query.data?.total ?? 0}</strong>{' '}
-                  {(query.data?.total ?? 0) === 1 ? 'coin' : 'coins'} to explore
+                  {(query.data?.total ?? 0) === 1 ? t('coin') : t('coins')}{' '}
+                  {t('to explore')}
                 </>
               )}
             </p>
             <label>
-              Sort by{' '}
+              {t('Sort by')}{' '}
               <select
-                aria-label="Sort coins"
+                aria-label={t('Sort coins')}
                 value={sort}
                 onChange={(e) => change('sort', e.target.value)}
               >
                 {sortOptions.map((s) => (
                   <option key={s.value} value={s.value}>
-                    {s.label}
+                    {t(s.label)}
                   </option>
                 ))}
               </select>
@@ -197,7 +205,20 @@ export default function Collection() {
                 <button
                   key={key}
                   onClick={() => change(key, '')}
-                  aria-label={'Remove ' + key + ' filter'}
+                  aria-label={t('Remove {filter} filter', {
+                    filter: t(
+                      {
+                        q: 'Search the collection',
+                        country: 'Countries / authorities',
+                        yearFrom: 'From year',
+                        yearTo: 'To year',
+                        period: 'Periods',
+                        denomination: 'Denominations',
+                        metal: 'Metals',
+                        grade: 'Grades',
+                      }[key],
+                    ),
+                  })}
                 >
                   {filters[key]}
                   <X size={13} />
@@ -207,7 +228,7 @@ export default function Collection() {
           )}
           {yearError ? (
             <p id="year-error" className="inline-error" role="alert">
-              {yearError}
+              {t(yearError)}
             </p>
           ) : query.isPending ? (
             <LoadingGrid />
@@ -219,42 +240,45 @@ export default function Collection() {
             <div className="empty-state">
               <Search />
               <h2>
-                {page > 1 ? 'No coins on this page' : 'No discoveries just yet'}
+                {page > 1
+                  ? t('No coins on this page')
+                  : t('No discoveries just yet')}
               </h2>
-              <p>Try a different keyword or broaden your filters.</p>
+              <p>{t('Try a different keyword or broaden your filters.')}</p>
               <button
                 className="button"
                 onClick={() => (page > 1 ? change('page', '1') : clear())}
               >
-                {page > 1 ? 'Return to page one' : 'Clear filters'}
+                {page > 1 ? t('Return to page one') : t('Clear filters')}
               </button>
             </div>
           )}
           {totalPages > 1 && (
-            <nav className="pagination" aria-label="Catalogue pages">
+            <nav className="pagination" aria-label={t('Catalogue pages')}>
               <button
                 disabled={page <= 1}
                 onClick={() => change('page', String(page - 1))}
               >
                 <ChevronLeft size={17} />
-                Previous
+                {t('Previous')}
               </button>
               <span>
-                Page {page} of {totalPages}
+                {t('Page')} {page} {t('of')} {totalPages}
               </span>
               <button
                 disabled={page >= totalPages}
                 onClick={() => change('page', String(page + 1))}
               >
-                Next
+                {t('Next')}
                 <ChevronRight size={17} />
               </button>
             </nav>
           )}
           {isDemo && (
             <p className="sample-note">
-              Illustrative preview records · Replace with your verified
-              specimens through Supabase.
+              {t(
+                'Illustrative preview records · Replace with your verified specimens through Supabase.',
+              )}
             </p>
           )}
         </div>
