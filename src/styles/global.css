@@ -1582,9 +1582,3 @@ main:focus {
     transform: none;
   }
 }
-
-/* Straighten the royal wedding portrait without changing the original photo.
-   The separate rotate property preserves the card's hover zoom. */
-img[src*="/greece-30-drachmai-1964-obverse"] {
-  rotate: -10deg;
-}
