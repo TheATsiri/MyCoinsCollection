@@ -5,6 +5,11 @@ export type ImportResult = {
   fields: Record<string, string | number>
   source_url: string
   warnings: string[]
+  numista?: {
+    id: number
+    title: string
+    details: { label: string; value: string | number }[]
+  }
 }
 export type SaveRequest = {
   submission: string
@@ -36,10 +41,21 @@ export async function retrieveInformation(url: string): Promise<ImportResult> {
   const { data, error } = await admin().functions.invoke('import-coin', {
     body: { url },
   })
-  if (error)
+  if (error) {
+    // Only display known server messages; never expose response headers or keys.
+    const response = 'context' in error ? error.context : undefined
+    if (response instanceof Response) {
+      const body = await response.json().catch(() => null)
+      if (
+        typeof body?.error === 'string' &&
+        /^(Numista |This Numista |Enter a Numista )/.test(body.error)
+      )
+        throw new Error(body.error)
+    }
     throw new Error(
       'Information could not be retrieved. Enter the coin details manually.',
     )
+  }
   return data as ImportResult
 }
 export async function cleanupPhotos() {

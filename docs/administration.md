@@ -5,7 +5,7 @@ The existing React/Supabase project now provides `/admin/login`, `/admin`, `/adm
 ## Deploy and provision
 
 1. Apply `supabase/migrations/002_administration.sql` after migration 001. It adds owner-authorized transactional saves, private submission receipts, a protected photo cleanup queue, and minimal public Realtime refresh broadcasts. Existing coin URLs and private ownership data are preserved.
-2. Deploy `supabase/functions/import-coin` with Supabase CLI (`supabase functions deploy import-coin --project-ref YOUR_PROJECT_REF`) or upload its three files through the dashboard editor. The checked-in function configuration uses custom token verification: the function calls Auth `getUser` and `is_collection_owner` before fetching a reference. For dashboard deployments, turn off the redundant legacy-only JWT gateway verifier after deploying this code.
+2. Deploy `supabase/functions/import-coin` with Supabase CLI (`supabase functions deploy import-coin --project-ref YOUR_PROJECT_REF`) or upload its four files through the dashboard editor. The checked-in function configuration uses custom token verification: the function calls Auth `getUser` and `is_collection_owner` before fetching a reference. For dashboard deployments, turn off the redundant legacy-only JWT gateway verifier after deploying this code.
 3. Set `ADMIN_ORIGINS` to the exact public website origin. Add local development origins as a comma-separated list only when needed. No AI key or paid service is used.
 4. Disable public signups. Create the one owner account through Supabase Authentication; the owner should choose their password themselves. Add its UUID to `private.admin_users` through privileged SQL. Never put a password, secret API key, or service-role key in frontend settings.
 5. Set Auth Site URL to the production origin and permit `https://mycoinscollection.pages.dev/admin/login` as a recovery redirect. Sign in through the public `/admin/login` page after the frontend release.
@@ -46,3 +46,28 @@ Public changes broadcast only an empty refresh payload on `public-collection`; h
 - `node scripts/test-admin-hosted.mjs`: read-only hosted anonymous/CORS checks using the existing local public settings, without printing keys.
 
 Hosted account login, password recovery, and owner photo storage operations require provisioning the real owner account. Run a real two-browser update test once that account is available. Firefox retains the previously documented Windows startup limitation.
+
+## Numista Free Plan and secure setup
+
+Reviewed 4 October 2026 against [Numista API documentation](https://en.numista.com/api/doc/index.php), [pricing](https://en.numista.com/api/pricing.php), and [license](https://en.numista.com/api/license.php).
+
+The Free Plan provides 2,000 requests per calendar month, no credit card requirement, and no image search. This integration uses one `GET https://api.numista.com/v3/types/{id}?lang=en` per explicit lookup. It does not enable a paid plan, perform image identification, scrape Numista pages as a fallback, or automatically fetch additional endpoints. Numista controls the quota; other applications sharing your key also consume it. A 429 response means quota or concurrency limits have been reached. Check usage in the Numista API account and retry later as appropriate. German and Greek interface users receive English API catalogue text because the API supports en/es/fr.
+
+1. Sign in at [Numista API](https://en.numista.com/api/index.php) and activate the **Free Plan** yourself after reviewing its agreement. Obtain the API key from your API account.
+2. Open [Supabase Edge Function secrets](https://supabase.com/dashboard/project/bwndmbfjyifrzfomjxvg/functions/secrets). Add the name `NUMISTA_API_KEY`, paste your actual key into its secret Value field, and save. Do not send the key in chat.
+3. Deploy the updated `import-coin` function, including `index.ts`, `extract.ts`, `safe-fetch.ts`, and `numista.ts`. Existing administrator token/owner checks and exact-origin restrictions still apply. No database migration is required.
+4. The server reads `Deno.env.get('NUMISTA_API_KEY')` and sends it only to `api.numista.com` in the `Numista-API-Key` header. Redirects are rejected. Responses are bounded to 12 seconds and 1 MB; transport and upstream error bodies are not shown or logged. Do not put the key in `VITE_*`, Cloudflare frontend build variables, source files, Git, browser storage, or the coin database. Rotate it through Numista and replace the Supabase secret if exposed.
+
+### Use it in administration
+
+1. Log in at `/admin/login`, then choose **Add coin** or edit a coin.
+2. Find the coin on Numista and copy its catalogue URL, for example `https://en.numista.com/catalogue/pieces420.html` or `https://en.numista.com/420` (N#420).
+3. Paste the URL into the **first Reference URL** field. Click **Retrieve information**. Each click consumes one API request; no polling or automatic retries are used.
+4. Review **Numista live lookup**, its N# identifier, and **Source: Numista**. This read-only preview remains in component memory only and disappears when you leave/reload the editor. It is not included in session-storage pending submissions or database writes.
+5. Click **Add Numista reference**. This retains only the Numista catalogue name, N# identifier, and canonical link; it does not fill catalogue fields or copy photographs. Repeated clicks do not duplicate the reference. When the first reference is a blank Website reference, it is replaced; existing catalogue references are retained.
+6. Enter your independently sourced catalogue details and upload your own obverse/reverse photographs. Review publication status, then click **Add to My Coins Collection** (or **Save changes**).
+7. The saved reference links visitors to Numista. Existing coin management, transactional saves, and live refresh behavior remain unchanged.
+
+The current license permits storing identifiers indefinitely. It prohibits persistent storage of other API catalogue data except specified metadata caching or private personal projects; the private-project exception does not cover this public website. Written permission from Numista would be needed before adding persistent API-detail imports for publication. Do not copy temporary preview details into public catalogue fields as a workaround.
+
+Missing configuration, rejected keys, quota limits, unknown N# IDs, and unavailable responses leave editor details and the original URL intact. Use another independent source or retry an explicit lookup after resolving the error.

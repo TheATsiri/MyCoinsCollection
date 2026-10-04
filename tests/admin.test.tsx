@@ -231,3 +231,43 @@ describe('coin editor', () => {
     expect(mocks.upload).toHaveBeenCalledTimes(2)
   })
 })
+
+it('keeps Numista details temporary and saves only the selected N# reference', async () => {
+  const user = userEvent.setup()
+  mocks.retrieve.mockResolvedValue({
+    fields: {},
+    source_url: 'https://en.numista.com/420',
+    warnings: [],
+    numista: {
+      id: 420,
+      title: 'API preview title',
+      details: [{ label: 'Weight (g)', value: 1.2 }],
+    },
+  })
+  editor()
+  await user.type(
+    screen.getByLabelText('Coin name'),
+    'My independently documented coin',
+  )
+  await user.type(
+    screen.getByLabelText('Reference URL'),
+    'https://en.numista.com/420',
+  )
+  await user.click(screen.getByRole('button', { name: 'Retrieve information' }))
+  await screen.findByRole('heading', { name: /N#420/ })
+  expect(screen.queryByRole('button', { name: 'Use this value' })).toBeNull()
+  expect(screen.getByLabelText('Coin name')).toHaveValue(
+    'My independently documented coin',
+  )
+  expect(screen.getByLabelText('Weight (g)')).toHaveValue(null)
+  await user.click(
+    screen.getByRole('button', { name: 'Add Numista reference' }),
+  )
+  await user.click(
+    screen.getByRole('button', { name: 'Add Numista reference' }),
+  )
+  expect(screen.getByLabelText('Catalogue')).toHaveValue('Numista')
+  expect(screen.getByLabelText('Reference number')).toHaveValue('N#420')
+  expect(sessionStorage.length).toBe(0)
+  expect(mocks.save).not.toHaveBeenCalled()
+})

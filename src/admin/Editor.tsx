@@ -405,9 +405,45 @@ function CoinForm({ existing }: { existing?: Coin }) {
               'Review imported information before saving. Unknown details can be entered manually.',
             )}
           </p>
+          <details>
+            <summary>{t('How to use Numista')}</summary>
+            <ol>
+              <li>
+                {t(
+                  'Find your coin in the Numista catalogue and copy its catalogue URL.',
+                )}
+              </li>
+              <li>
+                {t(
+                  'Paste the URL in the first Reference URL field, then click Retrieve information.',
+                )}
+              </li>
+              <li>
+                {t(
+                  'Review the live preview and select Add Numista reference to retain its N# identifier.',
+                )}
+              </li>
+              <li>
+                {t(
+                  'Enter your own catalogue details, upload both photographs, and save the coin.',
+                )}
+              </li>
+            </ol>
+            <p>
+              {t(
+                'The Free Plan includes 2,000 requests per calendar month. Each lookup uses one request; image search is excluded. API catalogue details are shown in English.',
+              )}
+            </p>
+          </details>
           {suggestions && (
             <div className="admin-import" role="status">
-              <h2>{t('Imported suggestions')}</h2>
+              <h2>
+                {t(
+                  suggestions.numista
+                    ? 'Numista live lookup'
+                    : 'Imported suggestions',
+                )}
+              </h2>
               <a
                 href={suggestions.source_url}
                 target="_blank"
@@ -415,6 +451,57 @@ function CoinForm({ existing }: { existing?: Coin }) {
               >
                 {suggestions.source_url}
               </a>
+              {suggestions.numista && (
+                <>
+                  <h3>
+                    N#{suggestions.numista.id} · {suggestions.numista.title}
+                  </h3>
+                  <p>{t('Source: Numista')}</p>
+                  <p>
+                    {t(
+                      'This preview is temporary. Only the N# reference can be saved. Use your own photographs and independently sourced details for publication.',
+                    )}
+                  </p>
+                  <dl>
+                    {suggestions.numista.details.map(({ label, value }) => (
+                      <div key={label}>
+                        <dt>{t(label)}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setReferences((previous) => {
+                        const number = `N#${suggestions.numista!.id}`
+                        if (
+                          previous.some(
+                            (reference) =>
+                              reference.catalogue === 'Numista' &&
+                              reference.reference_number === number,
+                          )
+                        )
+                          return previous
+                        const reference = {
+                          catalogue: 'Numista',
+                          reference_number: number,
+                          edition: null,
+                          source_url: suggestions.source_url,
+                        }
+                        return previous[0]?.source_url ===
+                          suggestions.source_url &&
+                          previous[0].catalogue === 'Website' &&
+                          !previous[0].reference_number
+                          ? [reference, ...previous.slice(1)]
+                          : [...previous, reference]
+                      })
+                    }
+                  >
+                    {t('Add Numista reference')}
+                  </button>
+                </>
+              )}
               {suggestions.warnings.map((warning, index) => (
                 <p key={index}>{t(warning)}</p>
               ))}

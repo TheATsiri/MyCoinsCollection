@@ -115,13 +115,11 @@ test('logs in, restores its session, reviews imports, uploads processed photos, 
     .png()
     .toBuffer()
   for (const side of ['obverse', 'reverse'])
-    await page
-      .getByLabel(side, { exact: true })
-      .setInputFiles({
-        name: `${side}.png`,
-        mimeType: 'image/png',
-        buffer: png,
-      })
+    await page.getByLabel(side, { exact: true }).setInputFiles({
+      name: `${side}.png`,
+      mimeType: 'image/png',
+      buffer: png,
+    })
   await expect(page.locator('.admin-photo-preview')).toHaveCount(2)
   await page.screenshot({
     path: info.outputPath('coin-editor.png'),
@@ -164,4 +162,59 @@ test('rejects a logged-in non-owner', async ({ page }) => {
   await expect(
     page.getByRole('link', { name: 'Add coin', exact: true }),
   ).toHaveCount(0)
+})
+
+test('reviews a temporary Numista lookup and retains only its reference', async ({
+  page,
+}, info) => {
+  await mockApi(page, async () => undefined)
+  await page.route(
+    'https://admin-test.supabase.co/functions/v1/import-coin',
+    (route) =>
+      route.fulfill({
+        json: {
+          fields: {},
+          source_url: 'https://en.numista.com/420',
+          warnings: [],
+          numista: {
+            id: 420,
+            title: 'Example coin (test fixture)',
+            details: [
+              { label: 'Issuing authority', value: 'Example issuer' },
+              { label: 'Weight (g)', value: 1.2 },
+            ],
+          },
+        },
+      }),
+  )
+  await login(page)
+  await page.getByRole('link', { name: 'Add coin', exact: true }).click()
+  await page
+    .getByLabel('Coin name')
+    .fill('My independently documented specimen')
+  await page.getByLabel('Reference URL').fill('https://en.numista.com/420')
+  await page.getByRole('button', { name: 'Retrieve information' }).click()
+  await expect(
+    page.getByRole('heading', { name: 'Numista live lookup' }),
+  ).toBeVisible()
+  await expect(page.getByText('Source: Numista', { exact: true })).toBeVisible()
+  await expect(
+    page.getByRole('button', { name: 'Use this value' }),
+  ).toHaveCount(0)
+  await page.getByRole('button', { name: 'Add Numista reference' }).click()
+  await page.getByRole('button', { name: 'Add Numista reference' }).click()
+  await expect(page.getByLabel('Catalogue', { exact: true })).toHaveValue(
+    'Numista',
+  )
+  await expect(page.getByLabel('Reference number')).toHaveValue('N#420')
+  await expect(page.getByLabel('Coin name')).toHaveValue(
+    'My independently documented specimen',
+  )
+  await expect(page.getByLabel('Weight (g)')).toHaveValue('')
+  await page.getByText('How to use Numista', { exact: true }).click()
+  await page.screenshot({
+    path: info.outputPath('numista-live-lookup.png'),
+    fullPage: true,
+  })
+  expect(await page.evaluate(() => sessionStorage.length)).toBe(0)
 })

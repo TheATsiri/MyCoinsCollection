@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2.117.2'
 import { extractCoin } from './extract.ts'
 import { fetchPublicPage } from './safe-fetch.ts'
+import { numistaTypeId, lookupNumista } from './numista.ts'
 const allowedOrigins = (Deno.env.get('ADMIN_ORIGINS') ?? '')
   .split(',')
   .map((value) => value.trim())
@@ -55,6 +56,11 @@ Deno.serve(async (request) => {
     const body = JSON.parse(bodyText)
     if (typeof body.url !== 'string' || body.url.length > 4096)
       return reply({ error: 'Invalid reference URL' }, 400)
+    const numistaId = numistaTypeId(body.url)
+    if (numistaId !== null)
+      return reply(
+        await lookupNumista(numistaId, Deno.env.get('NUMISTA_API_KEY')),
+      )
     const page = await fetchPublicPage(body.url)
     return reply(extractCoin(page.html, page.url))
   } catch (error) {

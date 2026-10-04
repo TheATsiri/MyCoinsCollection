@@ -1,5 +1,49 @@
 export type Language = 'en' | 'de' | 'el'
 const entries: [string, string, string][] = [
+  ['Numista live lookup', 'Numista-Live-Abfrage', 'Ζωντανή αναζήτηση Numista'],
+  ['Source: Numista', 'Quelle: Numista', 'Πηγή: Numista'],
+  [
+    'Add Numista reference',
+    'Numista-Referenz hinzufügen',
+    'Προσθήκη αναφοράς Numista',
+  ],
+  [
+    'How to use Numista',
+    'Numista verwenden',
+    'Πώς να χρησιμοποιήσετε το Numista',
+  ],
+  ['Size (mm)', 'Größe (mm)', 'Μέγεθος (mm)'],
+  ['Year range', 'Zeitraum', 'Εύρος ετών'],
+  [
+    'This preview is temporary. Only the N# reference can be saved. Use your own photographs and independently sourced details for publication.',
+    'Diese Vorschau ist vorübergehend. Nur die N#-Referenz kann gespeichert werden. Verwenden Sie eigene Fotos und unabhängig recherchierte Angaben zur Veröffentlichung.',
+    'Η προεπισκόπηση είναι προσωρινή. Αποθηκεύεται μόνο η αναφορά N#. Για δημοσίευση χρησιμοποιήστε δικές σας φωτογραφίες και στοιχεία από ανεξάρτητες πηγές.',
+  ],
+  [
+    'Find your coin in the Numista catalogue and copy its catalogue URL.',
+    'Suchen Sie Ihre Münze im Numista-Katalog und kopieren Sie die Katalog-URL.',
+    'Βρείτε το νόμισμά σας στον κατάλογο Numista και αντιγράψτε τη διεύθυνσή του.',
+  ],
+  [
+    'Paste the URL in the first Reference URL field, then click Retrieve information.',
+    'Fügen Sie die URL in das erste Feld Referenz-URL ein und klicken Sie auf Informationen abrufen.',
+    'Επικολλήστε τη διεύθυνση στο πρώτο πεδίο URL αναφοράς και πατήστε Ανάκτηση πληροφοριών.',
+  ],
+  [
+    'Review the live preview and select Add Numista reference to retain its N# identifier.',
+    'Prüfen Sie die Live-Vorschau und wählen Sie Numista-Referenz hinzufügen, um die N#-Kennung zu behalten.',
+    'Ελέγξτε την προεπισκόπηση και επιλέξτε Προσθήκη αναφοράς Numista για να κρατήσετε τον αριθμό N#.',
+  ],
+  [
+    'Enter your own catalogue details, upload both photographs, and save the coin.',
+    'Tragen Sie eigene Katalogangaben ein, laden Sie beide Fotos hoch und speichern Sie die Münze.',
+    'Συμπληρώστε τα δικά σας στοιχεία, ανεβάστε και τις δύο φωτογραφίες και αποθηκεύστε το νόμισμα.',
+  ],
+  [
+    'The Free Plan includes 2,000 requests per calendar month. Each lookup uses one request; image search is excluded. API catalogue details are shown in English.',
+    'Der kostenlose Tarif umfasst 2.000 Anfragen pro Kalendermonat. Jede Abfrage benötigt eine Anfrage; die Bildsuche ist ausgeschlossen. API-Katalogangaben werden auf Englisch angezeigt.',
+    'Το δωρεάν πρόγραμμα περιλαμβάνει 2.000 αιτήματα ανά ημερολογιακό μήνα. Κάθε αναζήτηση χρησιμοποιεί ένα αίτημα· η αναζήτηση εικόνων εξαιρείται. Τα στοιχεία του API εμφανίζονται στα αγγλικά.',
+  ],
   [
     'My Coin Collection home',
     'Meine Münzsammlung – Startseite',
