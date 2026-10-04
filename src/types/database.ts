@@ -12,9 +12,25 @@ export type Database = {
       coins: Table<Omit<Coin, 'coin_images' | 'coin_references'>>
       coin_images: Table<CoinImage>
       coin_references: Table<CoinReference>
+      photo_cleanup: Table<{
+        path: string
+        retry_after: string
+        last_error: string | null
+        created_at: string
+      }>
     }
     Views: Record<string, never>
     Functions: {
+      is_collection_owner: { Args: Record<string, never>; Returns: boolean }
+      save_coin: {
+        Args: {
+          p_submission_id: string
+          p_coin: Json
+          p_images: Json
+          p_references: Json
+        }
+        Returns: string
+      }
       search_coins: {
         Args: {
           p_query?: string

@@ -1,6 +1,6 @@
 # My Coin Collection
 
-A light museum-style coin catalogue built with React, TypeScript, Vite, and Supabase. The first release uses the Supabase dashboard for administration. A custom login/editor is a later milestone.
+A light museum-style coin catalogue built with React, TypeScript, Vite, and Supabase. The website includes a secure single-owner administration area with coin/photo editing, reviewed reference imports, and live public updates. See [administration setup](docs/administration.md).
 
 ## Start locally
 
@@ -28,7 +28,7 @@ With no Supabase settings, the site shows **clearly labelled sample records and 
 - Single-owner database authorization ready for a future authenticated admin interface.
 - Tests, photo preparation instructions, security headers and Cloudflare deployment configuration.
 
-There is no custom admin UI, continuous realtime subscription, server-rendered SEO or visitor account system in this release.
+The administration workflow and Realtime refresh subscriptions are implemented. Server-rendered SEO and visitor accounts are outside this release.
 
 ## Connect your database
 
@@ -105,11 +105,11 @@ Database deletion cascades associated metadata, but does not delete photo files.
 
 At 500 coins, two sides and two sizes averaging 450 KB per side, storage is approximately 450 MB. Large photos or extra images change that estimate. Supabase's egress quotas apply even though the frontend host has generous static traffic allowances.
 
-## Future administrator login
+## Administrator login
 
 The migration includes owner-only authenticated policies. Dashboard editing does not need an application login.
 
-When implementing the next milestone:
+Follow [the administration deployment guide](docs/administration.md). Initial owner provisioning requires:
 
 1. Disable public signups in Supabase Auth.
 2. Create your single owner account manually.
@@ -120,7 +120,7 @@ insert into private.admin_users(user_id)
 values ('YOUR_AUTH_USER_UUID');
 ```
 
-4. Build login and coin/photo forms. Enable session persistence only in the admin client.
+4. Deploy the administration migration and import function. Session persistence is enabled only in the separate admin client.
 5. Verify signed-in non-owners still cannot read private records, edit coins or upload photos.
 
 Visitors cannot self-assign owner status. Route guards improve navigation; database policies enforce authorization. No secret key belongs in the admin browser either.

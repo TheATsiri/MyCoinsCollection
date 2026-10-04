@@ -5,7 +5,11 @@ const db = new PGlite()
 try {
   await db.exec(`
   create role anon; create role authenticated;
-  create schema auth; create schema storage;
+  create schema auth; create schema storage; create schema realtime;
+  create table realtime.test_events(payload jsonb,event text,topic text,private boolean);
+  create function realtime.send(payload jsonb,event text,topic text,private boolean default true) returns void language sql as $$
+    insert into realtime.test_events values(payload,event,topic,private)
+  $$;
   create table auth.users(id uuid primary key);
   create function auth.uid() returns uuid language sql stable as $$
     select (nullif(current_setting('request.jwt.claims',true),'')::jsonb->>'sub')::uuid
@@ -20,6 +24,12 @@ try {
   await db.exec(
     await readFile(
       new URL('../supabase/migrations/001_collection.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+  await db.exec(
+    await readFile(
+      new URL('../supabase/migrations/002_administration.sql', import.meta.url),
       'utf8',
     ),
   )
@@ -71,6 +81,12 @@ try {
   if (select name from public.coins where slug='owner-draft')<>'Updated owner draft' then raise exception 'Owner update failed'; end if;
  end $$;
  rollback;`)
+  await db.exec(
+    await readFile(
+      new URL('../supabase/tests/administration.sql', import.meta.url),
+      'utf8',
+    ),
+  )
   console.log(
     'PASS: migration, anonymous/non-owner RLS, authorized owner writes, storage policies, reference search, literal keywords, pagination and input validation',
   )

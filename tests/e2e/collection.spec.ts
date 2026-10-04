@@ -60,6 +60,7 @@ test('empty search, invalid years, unknown routes and mobile filters', async ({
   await page.getByLabel('Countries / authorities').selectOption('Germany')
   await expect(page.locator('.coin-card')).toHaveCount(1)
   await page.getByLabel('From year').fill('2020')
+  await expect(page).toHaveURL(/yearFrom=2020/)
   await page.getByLabel('To year').fill('2000')
   await expect(page.getByRole('alert')).toContainText('starting year')
   await page.goto('/unknown-page')

@@ -32,7 +32,7 @@ export default function Collection() {
     queryFn: getFilterOptions,
   })
   const query = useQuery({
-    queryKey: [t('coins'), effective, sort, page],
+    queryKey: ['coins', effective, sort, page],
     queryFn: () => listCoins(effective, sort, page),
     enabled: !yearError,
   })

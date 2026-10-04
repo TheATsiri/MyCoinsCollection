@@ -22,3 +22,16 @@ Production: https://mycoinscollection.pages.dev, deployed from TheATsiri/MyCoins
 - Home, collection, about and a coin deep URL returned HTTP 200 with SPA fallback. X-Content-Type-Options, X-Frame-Options and Content-Security-Policy were verified on the hosted responses.
 
 No genuine coin records have been supplied. Real specimen photos, future owner login, and actual mobile devices still need validation when available.
+
+## Administration verification — 4 October 2026
+
+- 45 unit/component checks passed, covering administrator login/recovery/session restoration, non-owner denial, explicit import review, idempotent save retry, image validation/resizing, source extraction, private network URL rejection, and live-query invalidation/reconnect polling.
+- Both migrations and embedded database tests passed: owner saves, non-owner denial, unchanged slugs, duplicate request receipts, stale-edit rejection, failed-save rollback, deletion cleanup, and empty public refresh payloads.
+- 21 public/demo browser checks passed across Chromium, WebKit, and an iPhone viewport.
+- Six authenticated workflow browser checks passed against isolated mocked APIs, including actual PNG-to-WebP processing in each browser, retained login sessions, explicit source review, publish, logout, and non-owner rejection.
+- Deno type-check and a real public-page fetch passed using the importer runtime.
+- Migration 002 and the three-file import function were deployed to hosted Supabase. Production origin configuration was saved, and custom Auth getUser/owner checks handle modern user tokens.
+- Hosted anonymous API checks passed: writes denied, cleanup rows undisclosed, import authentication enforced, unapproved origins rejected, and production CORS preflight accepted.
+- Existing hosted SQL authorization tests and rollback-only transactional owner/non-owner tests completed successfully without retaining fixtures or changing collection records.
+
+Actual owner login, recovery email delivery, authenticated reference fetch/photo uploads, and a live two-browser change test remain pending creation of the real administrator account. No administrator email or password has been supplied. Public signups are disabled, and the production site/recovery redirect URLs are configured. The previous Firefox Windows startup limitation remains documented above.

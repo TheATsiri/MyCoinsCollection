@@ -1,3 +1,7 @@
+import { AdminAuth, AdminGuard, Login } from './admin/Auth'
+import Dashboard from './admin/Dashboard'
+import Editor from './admin/Editor'
+import CollectionUpdates from './components/CollectionUpdates'
 import LanguageSelector from './components/LanguageSelector'
 import { useLanguage } from './i18n/useLanguage'
 import { useEffect } from 'react'
@@ -33,7 +37,8 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [location.pathname])
   return (
-    <>
+    <AdminAuth>
+      <CollectionUpdates />
       <a className="skip-link" href="#main">
         {t('Skip to content')}
       </a>
@@ -72,6 +77,12 @@ export default function App() {
             path="/coins/:slug"
             element={<Details key={location.pathname} />}
           />
+          <Route path="/admin/login" element={<Login />} />
+          <Route element={<AdminGuard />}>
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/coins/new" element={<Editor />} />
+            <Route path="/admin/coins/:id/edit" element={<Editor />} />
+          </Route>
           <Route path="/about" element={<About />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -95,8 +106,9 @@ export default function App() {
           </span>
           <span>{t('History is in the details.')}</span>
           <Link to="/about">{t('About this collection')}</Link>
+          <Link to="/admin">{t('Administration')}</Link>
         </div>
       </footer>
-    </>
+    </AdminAuth>
   )
 }

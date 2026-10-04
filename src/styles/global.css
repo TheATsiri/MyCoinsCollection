@@ -1709,3 +1709,120 @@ h3 {
   overflow-wrap: anywhere;
   hyphens: auto;
 }
+
+.admin-page {
+  padding-block: 48px;
+  min-height: 60vh;
+}
+.admin-page h1 {
+  margin-bottom: 24px;
+}
+.admin-toolbar,
+.admin-actions {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.admin-toolbar {
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.admin-form {
+  max-width: 960px;
+}
+.admin-login {
+  max-width: 440px;
+}
+.admin-form fieldset {
+  border: 1px solid var(--line);
+  padding: 24px;
+  margin: 24px 0;
+}
+.admin-form legend {
+  padding: 0 8px;
+  font-weight: 600;
+}
+.admin-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.admin-page input:not([type='checkbox']),
+.admin-page textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: inherit;
+  font: inherit;
+}
+.admin-page button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+}
+.admin-page button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.admin-wide {
+  grid-column: 1/-1;
+}
+.admin-photo-preview {
+  width: 100%;
+  height: 240px;
+  object-fit: contain;
+  background: var(--paper);
+}
+.admin-coin-list article {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0;
+}
+.admin-coin-list h2 {
+  font-size: 24px;
+}
+.admin-reference,
+.admin-import {
+  padding: 16px;
+  border: 1px solid var(--line);
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+.admin-import > div {
+  padding-block: 8px;
+}
+.admin-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+}
+.admin-confirm {
+  border: 2px solid #973c32;
+  padding: 24px;
+  margin-top: 24px;
+}
+.admin-confirm button {
+  margin-right: 12px;
+}
+@media (max-width: 650px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-coin-list article {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .admin-form fieldset {
+    padding: 16px;
+  }
+}

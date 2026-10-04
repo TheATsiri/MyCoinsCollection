@@ -15,7 +15,9 @@
     "test:db": "node scripts/test-db.mjs",
     "photos": "node scripts/prepare-photos.mjs",
     "format": "prettier --write .",
-    "test:photos": "node scripts/test-photos.mjs"
+    "test:photos": "node scripts/test-photos.mjs",
+    "test:admin:e2e": "playwright test --config=playwright.admin.config.ts",
+    "test:admin:hosted": "node scripts/test-admin-hosted.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",

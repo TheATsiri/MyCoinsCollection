@@ -1,0 +1,3 @@
+[functions.import-coin]
+# The function verifies the user token and owner role explicitly, including modern signing keys.
+verify_jwt = false
