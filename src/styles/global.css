@@ -567,7 +567,14 @@ main:focus {
   font-size: 13px;
 }
 .footer-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
   overflow-wrap: anywhere;
+}
+.footer-contact a span {
+  min-width: 0;
 }
 .footer-bottom {
   display: flex;

@@ -6,7 +6,7 @@ import LanguageSelector from './components/LanguageSelector'
 import { useLanguage } from './i18n/useLanguage'
 import { useEffect } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
-import { ArrowUpRight, Coins } from 'lucide-react'
+import { ArrowUpRight, Coins, Mail } from 'lucide-react'
 import { isDemo } from './lib/supabase'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
@@ -102,7 +102,8 @@ export default function App() {
         </div>
         <div className="container footer-contact">
           <a href="mailto:admin.my.coins.collection@gmail.com">
-            {t('Contact by email')}: admin.my.coins.collection@gmail.com
+            <Mail size={18} strokeWidth={1.5} aria-hidden="true" />
+            <span>{t('Contact by email')}: admin.my.coins.collection@gmail.com</span>
           </a>
         </div>
         <div className="container footer-bottom">
