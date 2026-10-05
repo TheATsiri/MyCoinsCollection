@@ -100,6 +100,11 @@ export default function App() {
             <ArrowUpRight size={16} />
           </Link>
         </div>
+        <div className="container footer-contact">
+          <a href="mailto:admin.my.coins.collection@gmail.com">
+            {t('Contact by email')}: admin.my.coins.collection@gmail.com
+          </a>
+        </div>
         <div className="container footer-bottom">
           <span>
             © {new Date().getFullYear()} {t('My Coin Collection')}

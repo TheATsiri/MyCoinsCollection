@@ -562,6 +562,13 @@ main:focus {
   font-size: 11px;
   color: #68735d;
 }
+.footer-contact {
+  margin-top: 24px;
+  font-size: 13px;
+}
+.footer-contact a {
+  overflow-wrap: anywhere;
+}
 .footer-bottom {
   display: flex;
   justify-content: space-between;

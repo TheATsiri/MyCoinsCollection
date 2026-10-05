@@ -1,5 +1,6 @@
 export type Language = 'en' | 'de' | 'el'
 const entries: [string, string, string][] = [
+  ['Contact by email', 'Kontakt per E-Mail', 'Επικοινωνία μέσω email'],
   ['Numista live lookup', 'Numista-Live-Abfrage', 'Ζωντανή αναζήτηση Numista'],
   ['Source: Numista', 'Quelle: Numista', 'Πηγή: Numista'],
   [
