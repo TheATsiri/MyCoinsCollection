@@ -1665,6 +1665,12 @@ main:focus {
   }
 }
 @media (max-width: 800px) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--paper);
+  }
   .header-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
