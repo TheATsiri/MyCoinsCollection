@@ -1853,7 +1853,6 @@ h3 {
   display: flex;
   gap: 22px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
   padding: 4px 0 8px;
@@ -1868,7 +1867,6 @@ h3 {
 .coin-carousel-slide {
   flex: 0 0 calc((100% - 66px) / 4);
   min-width: 0;
-  scroll-snap-align: start;
 }
 .coin-carousel-controls {
   display: flex;

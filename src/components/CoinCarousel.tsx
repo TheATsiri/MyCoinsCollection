@@ -23,11 +23,12 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
   const [hovering, setHovering] = useState(false)
   const [focused, setFocused] = useState(false)
   const [position, setPosition] = useState(1)
+  const travelDirection = useRef(1)
 
-  function move(direction: number, automatic = false) {
+  function move(direction: number) {
     const viewport = track.current
     if (!viewport) return
-    if (!automatic) setPlaying(false)
+    setPlaying(false)
     const first = viewport.children[0] as HTMLElement | undefined
     const second = viewport.children[1] as HTMLElement | undefined
     const step =
@@ -46,21 +47,32 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
   useEffect(() => {
     if (!playing || hovering || focused || reducedMotion || coins.length < 2)
       return
-    const timer = window.setInterval(() => {
-      const viewport = track.current
-      if (!viewport || document.hidden) return
-      const first = viewport.children[0] as HTMLElement | undefined
-      const second = viewport.children[1] as HTMLElement | undefined
-      if (!first || !second) return
+    const viewport = track.current
+    if (!viewport) return
+    let offset = viewport.scrollLeft
+    let previousTime: number | undefined
+    let frame: number
+    const animate = (time: number) => {
+      // Keep fractional pixels between frames and discard time spent in hidden tabs.
+      const elapsed =
+        previousTime === undefined ? 0 : Math.min(time - previousTime, 50)
+      previousTime = time
       const end = viewport.scrollWidth - viewport.clientWidth
-      if (end < 2) return
-      const next = viewport.scrollLeft + second.offsetLeft - first.offsetLeft
-      viewport.scrollTo({
-        left: next > end + 2 ? 0 : Math.min(end, next),
-        behavior: 'smooth',
-      })
-    }, 5000)
-    return () => window.clearInterval(timer)
+      if (!document.hidden && end > 0) {
+        offset += (travelDirection.current * 32 * elapsed) / 1000
+        if (offset >= end) {
+          offset = end
+          travelDirection.current = -1
+        } else if (offset <= 0) {
+          offset = 0
+          travelDirection.current = 1
+        }
+        viewport.scrollLeft = offset
+      }
+      frame = window.requestAnimationFrame(animate)
+    }
+    frame = window.requestAnimationFrame(animate)
+    return () => window.cancelAnimationFrame(frame)
   }, [playing, hovering, focused, reducedMotion, coins.length])
 
   return (
