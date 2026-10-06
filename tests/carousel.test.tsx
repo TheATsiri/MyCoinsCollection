@@ -80,7 +80,7 @@ it('still pauses on mouse hover', () => {
   expect(track.scrollLeft).toBe(paused)
 })
 
-it('offers Play when reduced motion is enabled and starts on explicit request', () => {
+it('autoplays on phones reporting reduced motion and still allows pausing', () => {
   vi.stubGlobal('matchMedia', () => ({
     matches: true,
     addEventListener: vi.fn(),
@@ -88,11 +88,12 @@ it('offers Play when reduced motion is enabled and starts on explicit request', 
   }))
   const track = setup()
   advance()
-  expect(track.scrollLeft).toBe(0)
-  fireEvent.click(screen.getByRole('button', { name: 'Play slideshow' }))
-  advance()
   expect(track.scrollLeft).toBeGreaterThan(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Pause slideshow' }))
+  const paused = track.scrollLeft
+  advance()
+  expect(track.scrollLeft).toBe(paused)
   expect(
-    screen.getByRole('button', { name: 'Pause slideshow' }),
+    screen.getByRole('button', { name: 'Play slideshow' }),
   ).toBeInTheDocument()
 })

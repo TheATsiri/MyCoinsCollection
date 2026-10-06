@@ -19,8 +19,8 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
     () => window.matchMedia(motionQuery).matches,
     () => true,
   )
-  const [playbackChoice, setPlaying] = useState<boolean | null>(null)
-  const playing = playbackChoice ?? !reducedMotion
+  // Autoplay is explicitly requested; keep the pause control available on every device.
+  const [playing, setPlaying] = useState(true)
   const [hovering, setHovering] = useState(false)
   const [focused, setFocused] = useState(false)
   const [touching, setTouching] = useState(false)
