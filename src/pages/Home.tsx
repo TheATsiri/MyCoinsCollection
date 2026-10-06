@@ -1,3 +1,4 @@
+import CoinCarousel from '../components/CoinCarousel'
 import { useLanguage } from '../i18n/useLanguage'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -14,7 +15,7 @@ import { useTitle } from '../hooks/useTitle'
 import { listCoins } from '../lib/api'
 import { isDemo } from '../lib/supabase'
 import { EMPTY_FILTERS } from '../types/coin'
-import { Cards, ErrorState, LoadingGrid } from '../components/States'
+import { ErrorState, LoadingGrid } from '../components/States'
 export default function Home() {
   const { t } = useLanguage()
 
@@ -118,7 +119,7 @@ export default function Home() {
         ) : query.isError ? (
           <ErrorState retry={() => void query.refetch()} />
         ) : query.data.items.length ? (
-          <Cards coins={query.data.items.slice(0, 4)} />
+          <CoinCarousel coins={query.data.items} />
         ) : (
           <div className="empty-state">
             <Coins />

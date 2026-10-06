@@ -1,5 +1,23 @@
 export type Language = 'en' | 'de' | 'el'
 const entries: [string, string, string][] = [
+  ['Featured coins', 'Ausgewählte Münzen', 'Επιλεγμένα νομίσματα'],
+  ['carousel', 'Karussell', 'καρουζέλ'],
+  ['slide', 'Folie', 'διαφάνεια'],
+  [
+    'Browse coins with the arrow keys',
+    'Münzen mit den Pfeiltasten durchsuchen',
+    'Περιηγηθείτε στα νομίσματα με τα βελάκια',
+  ],
+  [
+    'Coin {number} of {total}',
+    'Münze {number} von {total}',
+    'Νόμισμα {number} από {total}',
+  ],
+  ['Pause slideshow', 'Diashow pausieren', 'Παύση παρουσίασης'],
+  ['Play slideshow', 'Diashow abspielen', 'Έναρξη παρουσίασης'],
+  ['Previous coin', 'Vorherige Münze', 'Προηγούμενο νόμισμα'],
+  ['Next coin', 'Nächste Münze', 'Επόμενο νόμισμα'],
+
   ['Contact by email', 'Kontakt per E-Mail', 'Επικοινωνία μέσω email'],
   ['Numista live lookup', 'Numista-Live-Abfrage', 'Ζωντανή αναζήτηση Numista'],
   ['Source: Numista', 'Quelle: Numista', 'Πηγή: Numista'],

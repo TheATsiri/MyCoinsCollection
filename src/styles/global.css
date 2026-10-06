@@ -1846,3 +1846,92 @@ h3 {
     padding: 16px;
   }
 }
+
+/* Homepage cabinet: native scrolling keeps touch and keyboard browsing responsive. */
+.coin-carousel-track {
+  position: relative;
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  padding: 4px 0 8px;
+}
+.coin-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.coin-carousel-track:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 5px;
+}
+.coin-carousel-slide {
+  flex: 0 0 calc((100% - 66px) / 4);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.coin-carousel-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+}
+.coin-carousel-count {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.coin-carousel-count > span {
+  color: var(--muted);
+}
+.coin-carousel-progress {
+  height: 2px;
+  flex: 1;
+  background: var(--line);
+}
+.coin-carousel-progress > span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.6s ease;
+}
+.coin-carousel-buttons {
+  display: flex;
+  gap: 8px;
+}
+.coin-carousel-buttons button {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--green);
+  background: var(--paper);
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.coin-carousel-buttons button:hover {
+  background: var(--green);
+  color: var(--paper);
+}
+@media (max-width: 1000px) {
+  .coin-carousel-slide {
+    flex-basis: calc((100% - 22px) / 2);
+  }
+}
+@media (max-width: 600px) {
+  .coin-carousel-track {
+    gap: 16px;
+  }
+  .coin-carousel-slide {
+    flex-basis: 84%;
+  }
+  .coin-carousel-controls {
+    gap: 14px;
+    margin-top: 18px;
+  }
+}
