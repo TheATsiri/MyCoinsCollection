@@ -22,8 +22,17 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
   const [playing, setPlaying] = useState(true)
   const [hovering, setHovering] = useState(false)
   const [focused, setFocused] = useState(false)
+  const [touching, setTouching] = useState(false)
   const [position, setPosition] = useState(1)
   const travelDirection = useRef(1)
+  const touchResumeTimer = useRef<number | undefined>(undefined)
+
+  useEffect(() => () => window.clearTimeout(touchResumeTimer.current), [])
+
+  function finishTouch() {
+    window.clearTimeout(touchResumeTimer.current)
+    touchResumeTimer.current = window.setTimeout(() => setTouching(false), 500)
+  }
 
   function move(direction: number) {
     const viewport = track.current
@@ -45,7 +54,14 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
   }
 
   useEffect(() => {
-    if (!playing || hovering || focused || reducedMotion || coins.length < 2)
+    if (
+      !playing ||
+      hovering ||
+      focused ||
+      touching ||
+      reducedMotion ||
+      coins.length < 2
+    )
       return
     const viewport = track.current
     if (!viewport) return
@@ -73,7 +89,7 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
     }
     frame = window.requestAnimationFrame(animate)
     return () => window.cancelAnimationFrame(frame)
-  }, [playing, hovering, focused, reducedMotion, coins.length])
+  }, [playing, hovering, focused, touching, reducedMotion, coins.length])
 
   return (
     <div
@@ -81,20 +97,32 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
       role="region"
       aria-roledescription={t('carousel')}
       aria-label={t('Featured coins')}
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
+      onPointerEnter={(event) => {
+        if (event.pointerType === 'mouse') setHovering(true)
+      }}
+      onPointerLeave={() => {
+        setHovering(false)
+      }}
+      onTouchStart={() => {
+        window.clearTimeout(touchResumeTimer.current)
+        setTouching(true)
+      }}
+      onTouchEnd={finishTouch}
+      onTouchCancel={finishTouch}
     >
       <div
         className="coin-carousel-track"
         ref={track}
         tabIndex={0}
         aria-label={t('Browse coins with the arrow keys')}
-        onFocus={() => setFocused(true)}
+        onFocus={(event) => {
+          // Touch focus must not leave autoplay paused after a swipe or tap.
+          setFocused(event.target.matches(':focus-visible'))
+        }}
         onBlur={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget))
             setFocused(false)
         }}
-        onPointerDown={() => setPlaying(false)}
         onKeyDown={(event) => {
           if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
             event.preventDefault()
