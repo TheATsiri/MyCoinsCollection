@@ -6,8 +6,8 @@ import { demoCoins } from '../src/features/coins/demo'
 
 beforeEach(() => {
   vi.useFakeTimers()
-  vi.stubGlobal('matchMedia', () => ({
-    matches: false,
+  vi.stubGlobal('matchMedia', (query: string) => ({
+    matches: query === '(hover: hover)',
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
   }))
@@ -78,4 +78,21 @@ it('still pauses on mouse hover', () => {
   enterPointer(track, 'mouse')
   advance()
   expect(track.scrollLeft).toBe(paused)
+})
+
+it('offers Play when reduced motion is enabled and starts on explicit request', () => {
+  vi.stubGlobal('matchMedia', () => ({
+    matches: true,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }))
+  const track = setup()
+  advance()
+  expect(track.scrollLeft).toBe(0)
+  fireEvent.click(screen.getByRole('button', { name: 'Play slideshow' }))
+  advance()
+  expect(track.scrollLeft).toBeGreaterThan(0)
+  expect(
+    screen.getByRole('button', { name: 'Pause slideshow' }),
+  ).toBeInTheDocument()
 })

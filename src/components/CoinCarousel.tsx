@@ -19,7 +19,8 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
     () => window.matchMedia(motionQuery).matches,
     () => true,
   )
-  const [playing, setPlaying] = useState(true)
+  const [playbackChoice, setPlaying] = useState<boolean | null>(null)
+  const playing = playbackChoice ?? !reducedMotion
   const [hovering, setHovering] = useState(false)
   const [focused, setFocused] = useState(false)
   const [touching, setTouching] = useState(false)
@@ -54,15 +55,7 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
   }
 
   useEffect(() => {
-    if (
-      !playing ||
-      hovering ||
-      focused ||
-      touching ||
-      reducedMotion ||
-      coins.length < 2
-    )
-      return
+    if (!playing || hovering || focused || touching || coins.length < 2) return
     const viewport = track.current
     if (!viewport) return
     let offset = viewport.scrollLeft
@@ -89,7 +82,7 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
     }
     frame = window.requestAnimationFrame(animate)
     return () => window.cancelAnimationFrame(frame)
-  }, [playing, hovering, focused, touching, reducedMotion, coins.length])
+  }, [playing, hovering, focused, touching, coins.length])
 
   return (
     <div
@@ -98,7 +91,11 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
       aria-roledescription={t('carousel')}
       aria-label={t('Featured coins')}
       onPointerEnter={(event) => {
-        if (event.pointerType === 'mouse') setHovering(true)
+        if (
+          event.pointerType === 'mouse' &&
+          window.matchMedia('(hover: hover)').matches
+        )
+          setHovering(true)
       }}
       onPointerLeave={() => {
         setHovering(false)
@@ -166,15 +163,18 @@ export default function CoinCarousel({ coins }: { coins: Coin[] }) {
             <span style={{ width: `${(position / coins.length) * 100}%` }} />
           </div>
           <div className="coin-carousel-buttons">
-            {!reducedMotion && (
-              <button
-                type="button"
-                onClick={() => setPlaying(!playing)}
-                aria-label={t(playing ? 'Pause slideshow' : 'Play slideshow')}
-              >
-                {playing ? <Pause size={17} /> : <Play size={17} />}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                setPlaying(!playing)
+                setHovering(false)
+                setFocused(false)
+                setTouching(false)
+              }}
+              aria-label={t(playing ? 'Pause slideshow' : 'Play slideshow')}
+            >
+              {playing ? <Pause size={17} /> : <Play size={17} />}
+            </button>
             <button
               type="button"
               onClick={() => move(-1)}
