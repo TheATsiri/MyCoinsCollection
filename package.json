@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:reviews:e2e": "playwright test --config=playwright.reviews.config.ts",
     "check": "npm run lint && npm test && npm run test:db && npm run build",
     "test:db": "node scripts/test-db.mjs",
     "photos": "node scripts/prepare-photos.mjs",

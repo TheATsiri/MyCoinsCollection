@@ -79,6 +79,11 @@ test('pages fit their viewport and every sample image loads', async ({
   ]) {
     await page.goto(route)
     await page.locator('footer').scrollIntoViewIfNeeded()
+    // Offscreen carousel slides stay lazy on mobile. Request every image explicitly
+    // when verifying all source URLs, including slides outside the current viewport.
+    await page.evaluate(() => {
+      for (const image of document.images) image.loading = 'eager'
+    })
     await page.waitForFunction(() =>
       Array.from(document.images).every((i) => i.complete),
     )

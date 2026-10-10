@@ -13,7 +13,7 @@ export default function CollectionUpdates() {
         timer = undefined
         void client.invalidateQueries({
           predicate: (query) =>
-            ['coins', 'coin', 'filter-options'].includes(
+            ['coins', 'coin', 'filter-options', 'reviews'].includes(
               String(query.queryKey[0]),
             ),
         })

@@ -1,6 +1,7 @@
 import { AdminAuth, AdminGuard, Login } from './admin/Auth'
 import Dashboard from './admin/Dashboard'
 import Editor from './admin/Editor'
+import Reviews from './admin/Reviews'
 import CollectionUpdates from './components/CollectionUpdates'
 import LanguageSelector from './components/LanguageSelector'
 import { useLanguage } from './i18n/useLanguage'
@@ -80,6 +81,7 @@ export default function App() {
           <Route path="/admin/login" element={<Login />} />
           <Route element={<AdminGuard />}>
             <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/reviews" element={<Reviews />} />
             <Route path="/admin/coins/new" element={<Editor />} />
             <Route path="/admin/coins/:id/edit" element={<Editor />} />
           </Route>
@@ -103,7 +105,9 @@ export default function App() {
         <div className="container footer-contact">
           <a href="mailto:admin.my.coins.collection@gmail.com">
             <Mail size={18} strokeWidth={1.5} aria-hidden="true" />
-            <span>{t('Contact by email')}: admin.my.coins.collection@gmail.com</span>
+            <span>
+              {t('Contact by email')}: admin.my.coins.collection@gmail.com
+            </span>
           </a>
         </div>
         <div className="container footer-bottom">

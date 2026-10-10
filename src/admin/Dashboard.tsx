@@ -70,6 +70,9 @@ export default function Dashboard() {
     <section className="container admin-page">
       <div className="admin-toolbar">
         <h1>{t('Administration')}</h1>
+        <Link className="button" to="/admin/reviews">
+          {t('Review moderation')}
+        </Link>
         <Link className="button" to="/admin/coins/new">
           {t('Add coin')}
         </Link>
@@ -84,6 +87,7 @@ export default function Dashboard() {
                   sessionStorage.removeItem(key)
               client.removeQueries({ queryKey: ['admin-coins'] })
               client.removeQueries({ queryKey: ['admin-coin'] })
+              client.removeQueries({ queryKey: ['admin-reviews'] })
               navigate('/admin/login')
             })
           }

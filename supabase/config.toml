@@ -1,3 +1,7 @@
 [functions.import-coin]
 # The function verifies the user token and owner role explicitly, including modern signing keys.
 verify_jwt = false
+
+[functions.submit-review]
+# Public submissions are protected by server-verified Turnstile and database rate limits.
+verify_jwt = false

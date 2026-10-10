@@ -10,6 +10,7 @@ import type { CoinImage } from '../types/coin'
 import Lightbox from '../components/Lightbox'
 import { ErrorState, LoadingGrid } from '../components/States'
 import NotFound from './NotFound'
+import CoinReviews from '../components/CoinReviews'
 function Photograph({
   image,
   onOpen,
@@ -202,6 +203,7 @@ export default function Details() {
           </p>
         </section>
       </div>
+      <CoinReviews key={c.id} coinId={c.id} />
       {lightbox !== null && (
         <Lightbox
           images={images}

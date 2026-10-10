@@ -4,7 +4,7 @@ import { PGlite } from '@electric-sql/pglite'
 const db = new PGlite()
 try {
   await db.exec(`
-  create role anon; create role authenticated;
+  create role anon; create role authenticated; create role service_role bypassrls;
   create schema auth; create schema storage; create schema realtime;
   create table realtime.test_events(payload jsonb,event text,topic text,private boolean);
   create function realtime.send(payload jsonb,event text,topic text,private boolean default true) returns void language sql as $$
@@ -36,6 +36,18 @@ try {
   await db.exec(
     await readFile(
       new URL('../supabase/tests/security.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+  await db.exec(
+    await readFile(
+      new URL('../supabase/migrations/003_coin_reviews.sql', import.meta.url),
+      'utf8',
+    ),
+  )
+  await db.exec(
+    await readFile(
+      new URL('../supabase/tests/reviews.sql', import.meta.url),
       'utf8',
     ),
   )
@@ -88,7 +100,7 @@ try {
     ),
   )
   console.log(
-    'PASS: migration, anonymous/non-owner RLS, authorized owner writes, storage policies, reference search, literal keywords, pagination and input validation',
+    'PASS: migrations, RLS, owner writes, storage, search, pagination, review coin isolation, moderation, aggregates, idempotency, server-only submission, rate limits and deletion cascades',
   )
   console.log(
     'Note: auth/storage scaffolding is local. Repeat the SQL security checks on your hosted Supabase project.',
