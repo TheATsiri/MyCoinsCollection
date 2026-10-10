@@ -1,5 +1,8 @@
 export type Language = 'en' | 'de' | 'el'
 const entries: [string, string, string][] = [
+  ['Community rating', 'Bewertung der Community', 'Αξιολόγηση της κοινότητας'],
+  ['From the community', 'Aus der Community', 'Από την κοινότητα'],
+  ['Rating only', 'Nur Sternebewertung', 'Αξιολόγηση χωρίς κείμενο'],
   ['COLLECTOR FEEDBACK', 'SAMMLERMEINUNGEN', 'ΣΧΟΛΙΑ ΣΥΛΛΕΚΤΩΝ'],
   [
     'Ratings & reviews',

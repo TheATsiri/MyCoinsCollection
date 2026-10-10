@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useId, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Star } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
@@ -9,6 +9,7 @@ import ReviewVerification from './ReviewVerification'
 const interpretations = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
 function Stars({ rating }: { rating: number }) {
   const { t } = useLanguage()
+  const starId = useId().replace(/:/g, '')
   return (
     <span
       className="review-stars"
@@ -16,12 +17,24 @@ function Stars({ rating }: { rating: number }) {
       aria-label={t('{rating} out of 5 stars', { rating })}
     >
       {[1, 2, 3, 4, 5].map((n) => (
-        <Star
-          key={n}
-          size={20}
-          fill={n <= Math.round(rating) ? 'currentColor' : 'none'}
-          aria-hidden="true"
-        />
+        <span className="review-star" key={n} aria-hidden="true">
+          <Star size={20} />
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <defs>
+              <clipPath id={`star-${starId}-${n}`}>
+                <rect
+                  width={24 * Math.max(0, Math.min(1, rating - n + 1))}
+                  height="24"
+                />
+              </clipPath>
+            </defs>
+            <path
+              clipPath={`url(#star-${starId}-${n})`}
+              fill="currentColor"
+              d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L2.9 9.6l6.3-.9Z"
+            />
+          </svg>
+        </span>
       ))}
     </span>
   )
@@ -111,14 +124,21 @@ export default function CoinReviews({ coinId }: { coinId: string }) {
       {data && (
         <>
           <div className="review-summary">
-            <div>
+            <div className="review-score-panel">
               {data.total ? (
                 <>
+                  <span className="review-summary-label">
+                    {t('Community rating')}
+                  </span>
                   <p className="review-average">
-                    {Number(data.average).toFixed(1)} <small>/ 5</small>
+                    {new Intl.NumberFormat(language, {
+                      minimumFractionDigits: 1,
+                      maximumFractionDigits: 1,
+                    }).format(data.average!)}{' '}
+                    <small>/ 5</small>
                   </p>
                   <Stars rating={data.average!} />
-                  <p>
+                  <p className="review-summary-count">
                     {t('{count} ratings', { count: data.total })} ·{' '}
                     {t('{count} written reviews', {
                       count: data.written_count,
@@ -158,67 +178,100 @@ export default function CoinReviews({ coinId }: { coinId: string }) {
           </div>
           {data.total > 0 && (
             <>
-              <label className="review-sort">
-                {t('Sort reviews')}
-                <select
-                  value={sort}
-                  onChange={(e) => {
-                    setSort(e.target.value as ReviewSort)
-                    setPage(1)
-                  }}
-                >
-                  {(['newest', 'oldest', 'highest', 'lowest'] as const).map(
-                    (s) => (
-                      <option key={s} value={s}>
-                        {t(
-                          {
-                            newest: 'Newest first',
-                            oldest: 'Oldest first',
-                            highest: 'Highest rating',
-                            lowest: 'Lowest rating',
-                          }[s],
-                        )}
-                      </option>
-                    ),
-                  )}
-                </select>
-              </label>
+              <div className="review-toolbar">
+                <h3>
+                  {t('From the community')} <span>{data.total}</span>
+                </h3>
+                <label className="review-sort">
+                  {t('Sort reviews')}
+                  <select
+                    value={sort}
+                    onChange={(e) => {
+                      setSort(e.target.value as ReviewSort)
+                      setPage(1)
+                    }}
+                  >
+                    {(['newest', 'oldest', 'highest', 'lowest'] as const).map(
+                      (s) => (
+                        <option key={s} value={s}>
+                          {t(
+                            {
+                              newest: 'Newest first',
+                              oldest: 'Oldest first',
+                              highest: 'Highest rating',
+                              lowest: 'Lowest rating',
+                            }[s],
+                          )}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </label>
+              </div>
               <div className="review-list">
                 {data.items.map((review) => (
                   <article className="review-card" key={review.id}>
                     <div className="review-card-heading">
-                      <strong>{review.display_name}</strong>
-                      <time dateTime={review.created_at}>
-                        {new Intl.DateTimeFormat(language, {
-                          dateStyle: 'medium',
-                        }).format(new Date(review.created_at))}
-                      </time>
+                      <div className="review-author">
+                        <span className="review-avatar" aria-hidden="true">
+                          {Array.from(
+                            review.display_name.trim(),
+                          )[0]?.toLocaleUpperCase(language)}
+                        </span>
+                        <div>
+                          <strong>{review.display_name}</strong>
+                          <time dateTime={review.created_at}>
+                            {new Intl.DateTimeFormat(language, {
+                              dateStyle: 'medium',
+                            }).format(new Date(review.created_at))}
+                          </time>
+                        </div>
+                      </div>
+                      <span className="review-rating-badge">
+                        <Star
+                          size={14}
+                          fill="currentColor"
+                          aria-hidden="true"
+                        />{' '}
+                        {review.rating}.0
+                      </span>
                     </div>
-                    <Stars rating={review.rating} />
+                    <div className="review-card-rating">
+                      <Stars rating={review.rating} />
+                      <span>{t(interpretations[review.rating - 1])}</span>
+                    </div>
                     {review.review_text && (
                       <p className="review-text">{review.review_text}</p>
+                    )}
+                    {!review.review_text && (
+                      <p className="review-rating-only">{t('Rating only')}</p>
                     )}
                   </article>
                 ))}
               </div>
-              <nav className="review-pagination" aria-label={t('Review pages')}>
-                <button
-                  disabled={page === 1 || query.isFetching}
-                  onClick={() => setPage((p) => p - 1)}
+              {data.total > 10 && (
+                <nav
+                  className="review-pagination"
+                  aria-label={t('Review pages')}
                 >
-                  {t('Previous')}
-                </button>
-                <span>
-                  {t('Page')} {page} {t('of')}{' '}
-                  {Math.max(1, Math.ceil(data.total / 10))}
-                </span>
-                <button
-                  disabled={page * 10 >= data.total || query.isFetching}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  {t('Next')}
-                </button>
-              </nav>
+                  <button
+                    disabled={page === 1 || query.isFetching}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
+                    {t('Previous')}
+                  </button>
+                  <span>
+                    {t('Page')} {page} {t('of')}{' '}
+                    {Math.max(1, Math.ceil(data.total / 10))}
+                  </span>
+                  <button
+                    disabled={page * 10 >= data.total || query.isFetching}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    {t('Next')}
+                  </button>
+                </nav>
+              )}
             </>
           )}
         </>
