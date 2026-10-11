@@ -2489,8 +2489,16 @@ h3 {
   .cinematic-coin-shadow {
     animation: none;
   }
-  .cinematic-coin-control {
-    display: none;
+  /* Explicit Play opts this coin into motion without changing other effects. */
+  .user-motion-enabled .cinematic-coin-rotation {
+    animation: collector-coin-turn 18s linear infinite !important;
+  }
+  .user-motion-enabled .cinematic-coin-shadow {
+    animation: collector-coin-shadow 18s linear infinite !important;
+  }
+  .user-motion-enabled.is-paused .cinematic-coin-rotation,
+  .user-motion-enabled.is-paused .cinematic-coin-shadow {
+    animation-play-state: paused !important;
   }
 }
 .cinematic-coin-edge {
