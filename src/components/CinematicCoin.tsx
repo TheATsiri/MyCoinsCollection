@@ -1,24 +1,11 @@
-import { useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { Pause, Play } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
-
-const motionQuery = '(prefers-reduced-motion: reduce)'
-function subscribeMotion(callback: () => void) {
-  const media = window.matchMedia(motionQuery)
-  media.addEventListener('change', callback)
-  return () => media.removeEventListener('change', callback)
-}
 
 // Tangent panels close the rim so the coin remains solid even edge-on.
 export default function CinematicCoin() {
   const [paused, setPaused] = useState(false)
-  const [motionEnabled, setMotionEnabled] = useState(false)
-  const reducedMotion = useSyncExternalStore(
-    subscribeMotion,
-    () => window.matchMedia(motionQuery).matches,
-    () => true,
-  )
-  const playing = !paused && (!reducedMotion || motionEnabled)
+  const playing = !paused
   const sceneRef = useRef<HTMLDivElement>(null)
   const { t } = useLanguage()
 
@@ -75,7 +62,7 @@ export default function CinematicCoin() {
     <>
       <div
         ref={sceneRef}
-        className={`cinematic-coin-scene${playing ? '' : ' is-paused'}${motionEnabled ? ' user-motion-enabled' : ''}`}
+        className={`cinematic-coin-scene coin-autoplay${playing ? '' : ' is-paused'}`}
       >
         <div className="cinematic-coin-stage" aria-hidden="true">
           <div className="cinematic-coin-shadow" />
@@ -111,13 +98,7 @@ export default function CinematicCoin() {
         type="button"
         className="cinematic-coin-control"
         aria-label={t(playing ? 'Pause coin animation' : 'Play coin animation')}
-        onClick={() => {
-          if (playing) setPaused(true)
-          else {
-            setMotionEnabled(true)
-            setPaused(false)
-          }
-        }}
+        onClick={() => setPaused((value) => !value)}
       >
         {playing ? <Pause size={14} /> : <Play size={14} />}
       </button>

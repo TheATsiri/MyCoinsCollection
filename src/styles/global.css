@@ -2489,15 +2489,15 @@ h3 {
   .cinematic-coin-shadow {
     animation: none;
   }
-  /* Explicit Play opts this coin into motion without changing other effects. */
-  .user-motion-enabled .cinematic-coin-rotation {
+  /* The owner requested autoplay for this coin; the pause control stays available. */
+  .coin-autoplay .cinematic-coin-rotation {
     animation: collector-coin-turn 18s linear infinite !important;
   }
-  .user-motion-enabled .cinematic-coin-shadow {
+  .coin-autoplay .cinematic-coin-shadow {
     animation: collector-coin-shadow 18s linear infinite !important;
   }
-  .user-motion-enabled.is-paused .cinematic-coin-rotation,
-  .user-motion-enabled.is-paused .cinematic-coin-shadow {
+  .coin-autoplay.is-paused .cinematic-coin-rotation,
+  .coin-autoplay.is-paused .cinematic-coin-shadow {
     animation-play-state: paused !important;
   }
 }
