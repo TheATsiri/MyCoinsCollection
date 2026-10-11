@@ -1,4 +1,5 @@
 import CoinCarousel from '../components/CoinCarousel'
+import CinematicCoin from '../components/CinematicCoin'
 import { useLanguage } from '../i18n/useLanguage'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -28,10 +29,6 @@ export default function Home() {
     <>
       <section className="cinematic-hero">
         <picture className="cinematic-backdrop" aria-hidden="true">
-          <source
-            media="(max-width: 600px)"
-            srcSet="/images/collector-study-mobile.webp"
-          />
           <img
             src="/images/collector-study.webp"
             alt=""
@@ -74,6 +71,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <CinematicCoin />
       </section>
       <div className="values-strip">
         <div className="container">

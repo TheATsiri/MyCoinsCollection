@@ -151,6 +151,16 @@ const entries: [string, string, string][] = [
     'Νόμισμα {number} από {total}',
   ],
   ['Pause slideshow', 'Diashow pausieren', 'Παύση παρουσίασης'],
+  [
+    'Pause coin animation',
+    'Münzanimation pausieren',
+    'Παύση κίνησης νομίσματος',
+  ],
+  [
+    'Play coin animation',
+    'Münzanimation abspielen',
+    'Έναρξη κίνησης νομίσματος',
+  ],
   ['Play slideshow', 'Diashow abspielen', 'Έναρξη παρουσίασης'],
   ['Previous coin', 'Vorherige Münze', 'Προηγούμενο νόμισμα'],
   ['Next coin', 'Nächste Münze', 'Επόμενο νόμισμα'],

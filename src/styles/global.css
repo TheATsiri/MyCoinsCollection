@@ -2196,6 +2196,7 @@ h3 {
 }
 
 /* The collector's study spans the entire homepage hero. */
+
 .cinematic-hero {
   position: relative;
   isolation: isolate;
@@ -2214,7 +2215,6 @@ h3 {
   height: 100%;
   object-fit: cover;
   object-position: center 55%;
-  animation: study-reveal 16s ease-out both;
 }
 .cinematic-hero::before {
   content: '';
@@ -2281,14 +2281,6 @@ h3 {
 .cinematic-hero a:focus-visible {
   outline-color: #f4dba9;
 }
-@keyframes study-reveal {
-  from {
-    transform: scale(1.045);
-  }
-  to {
-    transform: scale(1);
-  }
-}
 @media (max-width: 800px) {
   .cinematic-hero .hero-copy {
     width: min(540px, 75%);
@@ -2305,9 +2297,6 @@ h3 {
   }
   .cinematic-hero .hero-copy {
     width: 100%;
-  }
-  .cinematic-backdrop img {
-    object-position: center;
   }
   .cinematic-hero::before {
     background:
@@ -2329,4 +2318,325 @@ h3 {
   .cinematic-backdrop img {
     animation: none;
   }
+}
+
+/* A photographed, two-sided coin rotating just above the desk. */
+.cinematic-hero .hero {
+  position: relative;
+}
+.cinematic-coin-scene {
+  --coin-size: 105px;
+  position: absolute;
+  visibility: hidden;
+  width: calc(var(--coin-size) + 100px);
+  height: calc(var(--coin-size) + 100px);
+  pointer-events: none;
+}
+
+.cinematic-coin-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 1100px;
+  pointer-events: none;
+}
+.cinematic-coin-position {
+  position: absolute;
+  width: var(--coin-size);
+  height: var(--coin-size);
+  left: 50%;
+  bottom: 46px;
+  transform: translateX(-50%);
+}
+.cinematic-coin-rotation {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(8deg) rotateY(-18deg) rotateZ(-7deg);
+  animation: collector-coin-turn 18s linear infinite;
+  will-change: transform;
+}
+.cinematic-coin-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.cinematic-coin-face {
+  overflow: hidden;
+  backface-visibility: hidden;
+  background: #8f826d;
+  border: 1px solid #bcaa86;
+}
+.cinematic-coin-face img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  transform: scale(1.1);
+  filter: sepia(0.14) brightness(0.92);
+}
+.cinematic-coin-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgb(255 230 180 / 24%),
+    transparent 42%,
+    rgb(23 17 10 / 32%)
+  );
+  box-shadow: inset 0 0 14px rgb(36 24 13 / 35%);
+}
+.coin-obverse {
+  transform: translateZ(4px);
+}
+.coin-reverse {
+  transform: rotateY(180deg) translateZ(4px);
+}
+.cinematic-coin-shadow {
+  position: absolute;
+  width: calc(var(--coin-size) * 1.15);
+  height: 35px;
+  left: 50%;
+  bottom: 24px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgb(10 6 3 / 80%),
+    rgb(10 6 3 / 42%) 38%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  transform: translateX(-50%) rotate(-7deg);
+  animation: collector-coin-shadow 18s linear infinite;
+}
+.cinematic-coin-control {
+  pointer-events: auto;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(237 210 166 / 45%);
+  border-radius: 50%;
+  background: rgb(26 19 13 / 65%);
+  color: #f0d7ab;
+}
+.cinematic-coin-control:hover {
+  background: #463322;
+}
+.cinematic-coin-control:focus-visible {
+  outline-color: #f4dba9;
+}
+.is-paused .cinematic-coin-rotation,
+.is-paused .cinematic-coin-shadow {
+  animation-play-state: paused;
+}
+@keyframes collector-coin-turn {
+  from {
+    transform: rotateX(8deg) rotateY(-18deg) rotateZ(-7deg);
+  }
+  to {
+    transform: rotateX(8deg) rotateY(342deg) rotateZ(-7deg);
+  }
+}
+@keyframes collector-coin-shadow {
+  0%,
+  50%,
+  100% {
+    transform: translateX(-50%) rotate(-7deg) scaleX(1);
+    opacity: 0.9;
+  }
+  25%,
+  75% {
+    transform: translateX(-50%) rotate(-7deg) scaleX(0.5);
+    opacity: 0.65;
+  }
+}
+/* Keep copy above the photographed desk on narrow viewports. */
+@media (max-width: 1100px) {
+  .cinematic-hero .hero {
+    min-height: 1050px;
+    align-items: flex-start;
+    padding-block: 50px 350px;
+  }
+  .cinematic-hero .hero-copy {
+    width: min(590px, 100%);
+  }
+}
+@media (max-width: 600px) {
+  .cinematic-hero .hero {
+    min-height: 960px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-coin-rotation,
+  .cinematic-coin-shadow {
+    animation: none;
+  }
+  .cinematic-coin-control {
+    display: none;
+  }
+}
+.cinematic-coin-edge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--coin-size) * 0.067);
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    #e0cdaa 0px 1px,
+    #8a7b62 1px 2px,
+    #b6a58b 2px 3px
+  );
+  transform: translate(-50%, -50%) rotateZ(var(--edge-angle))
+    translateY(calc(var(--coin-size) * -0.5 + 0.5px)) rotateX(90deg);
+}
+
+.edge-0 {
+  --edge-angle: 0deg;
+}
+.edge-1 {
+  --edge-angle: 7.5deg;
+}
+.edge-2 {
+  --edge-angle: 15deg;
+}
+.edge-3 {
+  --edge-angle: 22.5deg;
+}
+.edge-4 {
+  --edge-angle: 30deg;
+}
+.edge-5 {
+  --edge-angle: 37.5deg;
+}
+.edge-6 {
+  --edge-angle: 45deg;
+}
+.edge-7 {
+  --edge-angle: 52.5deg;
+}
+.edge-8 {
+  --edge-angle: 60deg;
+}
+.edge-9 {
+  --edge-angle: 67.5deg;
+}
+.edge-10 {
+  --edge-angle: 75deg;
+}
+.edge-11 {
+  --edge-angle: 82.5deg;
+}
+.edge-12 {
+  --edge-angle: 90deg;
+}
+.edge-13 {
+  --edge-angle: 97.5deg;
+}
+.edge-14 {
+  --edge-angle: 105deg;
+}
+.edge-15 {
+  --edge-angle: 112.5deg;
+}
+.edge-16 {
+  --edge-angle: 120deg;
+}
+.edge-17 {
+  --edge-angle: 127.5deg;
+}
+.edge-18 {
+  --edge-angle: 135deg;
+}
+.edge-19 {
+  --edge-angle: 142.5deg;
+}
+.edge-20 {
+  --edge-angle: 150deg;
+}
+.edge-21 {
+  --edge-angle: 157.5deg;
+}
+.edge-22 {
+  --edge-angle: 165deg;
+}
+.edge-23 {
+  --edge-angle: 172.5deg;
+}
+.edge-24 {
+  --edge-angle: 180deg;
+}
+.edge-25 {
+  --edge-angle: 187.5deg;
+}
+.edge-26 {
+  --edge-angle: 195deg;
+}
+.edge-27 {
+  --edge-angle: 202.5deg;
+}
+.edge-28 {
+  --edge-angle: 210deg;
+}
+.edge-29 {
+  --edge-angle: 217.5deg;
+}
+.edge-30 {
+  --edge-angle: 225deg;
+}
+.edge-31 {
+  --edge-angle: 232.5deg;
+}
+.edge-32 {
+  --edge-angle: 240deg;
+}
+.edge-33 {
+  --edge-angle: 247.5deg;
+}
+.edge-34 {
+  --edge-angle: 255deg;
+}
+.edge-35 {
+  --edge-angle: 262.5deg;
+}
+.edge-36 {
+  --edge-angle: 270deg;
+}
+.edge-37 {
+  --edge-angle: 277.5deg;
+}
+.edge-38 {
+  --edge-angle: 285deg;
+}
+.edge-39 {
+  --edge-angle: 292.5deg;
+}
+.edge-40 {
+  --edge-angle: 300deg;
+}
+.edge-41 {
+  --edge-angle: 307.5deg;
+}
+.edge-42 {
+  --edge-angle: 315deg;
+}
+.edge-43 {
+  --edge-angle: 322.5deg;
+}
+.edge-44 {
+  --edge-angle: 330deg;
+}
+.edge-45 {
+  --edge-angle: 337.5deg;
+}
+.edge-46 {
+  --edge-angle: 345deg;
+}
+.edge-47 {
+  --edge-angle: 352.5deg;
 }
