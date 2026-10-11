@@ -9,3 +9,5 @@ Implementation: full-width decorative background with a dark contrast overlay. A
 
 Verification: production build passed. Chromium and WebKit verified a stable tabletop anchor across 11 resize steps spanning 320px to 2048px, including responsive breakpoints and resizing back to desktop, with no text overlap or horizontal overflow. Rotation, both coin faces and edge, pause/resume, and reduced motion were checked. The collection CTA worked and the browser reported no page errors. Earlier collection/language browser checks passed all 12 tests.
 
+
+Phone/tablet refinement: below 1100px, show a wide room scene below the copy instead of a tall portrait crop. Anchor calculations use the actual photograph bounds, including its offset below the copy. A 32px minimum keeps the coin visible on phones; its rim scales proportionally. The pause control sits in the scene corner with a 44px touch target. Chromium and WebKit verified 10 resize steps, including the layout breakpoint, tabletop anchor stability, image containment, no text overlap or horizontal overflow, and pause/resume and reduced-motion behavior.

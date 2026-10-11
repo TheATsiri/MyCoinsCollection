@@ -2388,10 +2388,10 @@ h3 {
   box-shadow: inset 0 0 14px rgb(36 24 13 / 35%);
 }
 .coin-obverse {
-  transform: translateZ(4px);
+  transform: translateZ(calc(var(--coin-size) * 0.038));
 }
 .coin-reverse {
-  transform: rotateY(180deg) translateZ(4px);
+  transform: rotateY(180deg) translateZ(calc(var(--coin-size) * 0.038));
 }
 .cinematic-coin-shadow {
   position: absolute;
@@ -2413,8 +2413,8 @@ h3 {
 .cinematic-coin-control {
   pointer-events: auto;
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 18px;
+  bottom: 18px;
   width: 34px;
   height: 34px;
   display: grid;
@@ -2455,20 +2455,33 @@ h3 {
     opacity: 0.65;
   }
 }
-/* Keep copy above the photographed desk on narrow viewports. */
+/* Show the room below the copy instead of cropping it into a tall portrait. */
 @media (max-width: 1100px) {
+  .cinematic-hero {
+    --room-height: clamp(230px, 56.25vw, 520px);
+  }
+  .cinematic-backdrop {
+    top: auto;
+    height: var(--room-height);
+  }
+  .cinematic-hero::before {
+    top: auto;
+    height: var(--room-height);
+    background:
+      linear-gradient(180deg, #1b1510, transparent 32%),
+      linear-gradient(0deg, rgb(15 13 10 / 25%), transparent 45%);
+  }
   .cinematic-hero .hero {
-    min-height: 1050px;
+    min-height: 0;
     align-items: flex-start;
-    padding-block: 50px 350px;
+    padding-block: 45px calc(var(--room-height) + 28px);
   }
   .cinematic-hero .hero-copy {
     width: min(590px, 100%);
   }
-}
-@media (max-width: 600px) {
-  .cinematic-hero .hero {
-    min-height: 960px;
+  .cinematic-coin-control {
+    width: 44px;
+    height: 44px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2485,7 +2498,7 @@ h3 {
   top: 50%;
   left: 50%;
   width: calc(var(--coin-size) * 0.067);
-  height: 8px;
+  height: calc(var(--coin-size) * 0.076);
   background: repeating-linear-gradient(
     90deg,
     #e0cdaa 0px 1px,

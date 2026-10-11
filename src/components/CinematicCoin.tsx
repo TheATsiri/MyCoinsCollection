@@ -20,17 +20,27 @@ export default function CinematicCoin() {
     // This is the left tabletop corner selected in the reference screenshot.
     const placeCoin = () => {
       if (!photo.naturalWidth || !photo.naturalHeight) return
-      const width = hero.clientWidth
-      const height = hero.clientHeight
+      const heroBounds = hero.getBoundingClientRect()
+      const photoBounds = photo.getBoundingClientRect()
+      const width = photoBounds.width
+      const height = photoBounds.height
       const scale = Math.max(
         width / photo.naturalWidth,
         height / photo.naturalHeight,
       )
       const imageWidth = photo.naturalWidth * scale
       const imageHeight = photo.naturalHeight * scale
-      const x = imageWidth * 0.47 + (width - imageWidth) * 0.5
-      const y = imageHeight * 0.61 + (height - imageHeight) * 0.55
-      const size = imageWidth * (105 / 2048)
+      const x =
+        photoBounds.left -
+        heroBounds.left +
+        imageWidth * 0.47 +
+        (width - imageWidth) * 0.5
+      const y =
+        photoBounds.top -
+        heroBounds.top +
+        imageHeight * 0.61 +
+        (height - imageHeight) * 0.55
+      const size = Math.max(32, imageWidth * (105 / 2048))
       scene.style.setProperty('--coin-size', `${size}px`)
       scene.style.left = `${x - (size + 100) / 2}px`
       scene.style.top = `${y - size - 54}px`
@@ -38,6 +48,7 @@ export default function CinematicCoin() {
     }
     const observer = new ResizeObserver(placeCoin)
     observer.observe(hero)
+    observer.observe(photo)
     photo.addEventListener('load', placeCoin)
     placeCoin()
     return () => {
@@ -47,35 +58,37 @@ export default function CinematicCoin() {
   }, [])
 
   return (
-    <div
-      ref={sceneRef}
-      className={`cinematic-coin-scene${paused ? ' is-paused' : ''}`}
-    >
-      <div className="cinematic-coin-stage" aria-hidden="true">
-        <div className="cinematic-coin-shadow" />
-        <div className="cinematic-coin-position">
-          <div className="cinematic-coin-rotation">
-            {Array.from({ length: 48 }, (_, index) => (
-              <span
-                key={`edge-${index}`}
-                className={`cinematic-coin-edge edge-${index}`}
-              />
-            ))}
-            <div className="cinematic-coin-face coin-obverse">
-              <img
-                src="/images/hero-coin-obverse.webp"
-                alt=""
-                width="700"
-                height="700"
-              />
-            </div>
-            <div className="cinematic-coin-face coin-reverse">
-              <img
-                src="/images/hero-coin-reverse.webp"
-                alt=""
-                width="700"
-                height="700"
-              />
+    <>
+      <div
+        ref={sceneRef}
+        className={`cinematic-coin-scene${paused ? ' is-paused' : ''}`}
+      >
+        <div className="cinematic-coin-stage" aria-hidden="true">
+          <div className="cinematic-coin-shadow" />
+          <div className="cinematic-coin-position">
+            <div className="cinematic-coin-rotation">
+              {Array.from({ length: 48 }, (_, index) => (
+                <span
+                  key={`edge-${index}`}
+                  className={`cinematic-coin-edge edge-${index}`}
+                />
+              ))}
+              <div className="cinematic-coin-face coin-obverse">
+                <img
+                  src="/images/hero-coin-obverse.webp"
+                  alt=""
+                  width="700"
+                  height="700"
+                />
+              </div>
+              <div className="cinematic-coin-face coin-reverse">
+                <img
+                  src="/images/hero-coin-reverse.webp"
+                  alt=""
+                  width="700"
+                  height="700"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -88,6 +101,6 @@ export default function CinematicCoin() {
       >
         {paused ? <Play size={14} /> : <Pause size={14} />}
       </button>
-    </div>
+    </>
   )
 }
