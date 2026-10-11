@@ -1,0 +1,11 @@
+Cinematic homepage background
+
+Generated with the built-in Imagegen tool.
+
+Final prompt:
+Use case: historical-scene. Asset type: wide cinematic website hero background, landscape 16:9. Create a photorealistic luxurious private coin collector's study, like a still from a historical documentary. Dark walnut paneled walls and elegant wooden cabinets displaying small historical coins, antique wooden desk with realistic grain and patina across lower foreground, vintage leather books, an open coin album and magnifying glass arranged on the RIGHT half of the desk, warm amber antique brass desk lamp on the right, subtle volumetric light rays and dust, rich bronze, charcoal and antique gold palette. Composition: wide room view, left 45 percent quiet dark softly shadowed wall with negative space for white website headline overlay; visual interest and illuminated desk accessories on right. Beautiful authentic believable materials, restrained sophisticated lighting, cinematic depth. No people, no text, no logos, no oversized coin, no floating or spinning coin, no illustration, no game aesthetics.
+
+Implementation: full-width decorative background, responsive WebP images, dark contrast overlay, 16-second gentle camera push, static reduced-motion alternative. Existing translated copy and routes retained. Large illustrative coins removed.
+
+Verification: production build passed; desktop 1440px and mobile 390px browser checks found no overflow or console errors, background loaded, collection CTA navigated correctly, reduced-motion disabled animation.
+

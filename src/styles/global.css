@@ -288,88 +288,6 @@ main:focus {
   font-size: 10px;
   line-height: 1.7;
 }
-.hero-art {
-  height: 465px;
-  position: relative;
-  background: radial-gradient(ellipse at center, #ecebdd 0%, transparent 65%);
-}
-.orbit {
-  position: absolute;
-  border: 1px solid #dcdccf;
-  border-radius: 50%;
-  left: 50%;
-  top: 48%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-.orbit-one {
-  width: 375px;
-  height: 375px;
-}
-.orbit-two {
-  width: 455px;
-  height: 455px;
-  border-style: dashed;
-  border-color: #e0e0d5;
-}
-.hero-coin {
-  height: auto;
-  position: absolute;
-  filter: drop-shadow(15px 25px 14px #3e41332b);
-  width: 300px;
-  transition: transform 0.5s;
-}
-.hero-coin-front {
-  left: 4%;
-  top: 12%;
-  transform: rotate(-14deg);
-}
-.hero-coin-back {
-  left: 40%;
-  top: 29%;
-  width: 260px;
-  transform: rotate(16deg);
-}
-.hero-art:hover .hero-coin-front {
-  transform: rotate(-9deg) translateY(-5px);
-}
-.hero-art:hover .hero-coin-back {
-  transform: rotate(12deg) translateY(3px);
-}
-.art-number {
-  position: absolute;
-  top: 14px;
-  right: 5%;
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: #747c66;
-}
-.art-label {
-  position: absolute;
-  bottom: 12px;
-  left: 13%;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  font-size: 11px;
-  color: #737d66;
-}
-.art-label .small-line {
-  margin-top: 10px;
-}
-.art-label strong {
-  font-weight: 400;
-  color: #4c5748;
-}
-.art-footnote {
-  position: absolute;
-  right: 0;
-  bottom: 30px;
-  font-size: 7px;
-  letter-spacing: 1.3px;
-  color: #6e765f;
-  writing-mode: vertical-rl;
-}
 .values-strip {
   border-block: 1px solid var(--line);
   background: #eeefe6;
@@ -1069,27 +987,6 @@ main:focus {
   .hero h1 {
     font-size: 55px;
   }
-  .hero-art {
-    height: 400px;
-  }
-  .hero-coin-front {
-    width: 260px;
-    left: 0;
-    top: 15%;
-  }
-  .hero-coin-back {
-    width: 220px;
-    left: 37%;
-    top: 34%;
-  }
-  .orbit-one {
-    width: 300px;
-    height: 300px;
-  }
-  .orbit-two {
-    width: 365px;
-    height: 365px;
-  }
   .hero-actions {
     gap: 17px;
     flex-wrap: wrap;
@@ -1162,30 +1059,6 @@ main:focus {
   }
   .hero-caption {
     margin-top: 25px;
-  }
-  .hero-art {
-    height: 360px;
-  }
-  .hero-coin-front {
-    width: 210px;
-    top: 18%;
-  }
-  .hero-coin-back {
-    width: 175px;
-    left: 37%;
-    top: 36%;
-  }
-  .orbit-one {
-    width: 240px;
-    height: 240px;
-  }
-  .orbit-two {
-    width: 300px;
-    height: 300px;
-  }
-  .art-label {
-    font-size: 10px;
-    bottom: 0;
   }
   .values-strip .container {
     padding-block: 18px;
@@ -1338,41 +1211,6 @@ main:focus {
   }
   .hero-caption {
     display: none;
-  }
-  .hero-art {
-    height: 350px;
-    width: min(360px, 100%);
-    margin-inline: auto;
-    overflow: hidden;
-  }
-  .hero-coin-front {
-    width: 230px;
-    top: 12%;
-    left: 4%;
-  }
-  .hero-coin-back {
-    width: 190px;
-    top: 33%;
-    left: 40%;
-  }
-  .orbit-one {
-    width: 270px;
-    height: 270px;
-  }
-  .orbit-two {
-    width: 330px;
-    height: 330px;
-  }
-  .art-label {
-    bottom: 9px;
-  }
-  .art-number {
-    top: 5px;
-    font-size: 8px;
-  }
-  .art-footnote {
-    font-size: 6px;
-    bottom: 20px;
   }
   .values-strip .container {
     justify-content: center;
@@ -1585,12 +1423,6 @@ main:focus {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
-  }
-  .hero-art:hover .hero-coin-front {
-    transform: rotate(-14deg);
-  }
-  .hero-art:hover .hero-coin-back {
-    transform: rotate(16deg);
   }
   .coin-card:hover .coin-stage img {
     transform: none;
@@ -2360,5 +2192,141 @@ h3 {
 @media (prefers-reduced-motion: reduce) {
   .star-picker svg {
     transition: none;
+  }
+}
+
+/* The collector's study spans the entire homepage hero. */
+.cinematic-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #1b1510;
+  color: #fbf7ef;
+}
+.cinematic-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+.cinematic-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+  animation: study-reveal 16s ease-out both;
+}
+.cinematic-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(15 13 10 / 91%) 0%,
+      rgb(15 13 10 / 75%) 30%,
+      rgb(15 13 10 / 30%) 62%,
+      rgb(15 13 10 / 8%) 100%
+    ),
+    linear-gradient(0deg, rgb(15 13 10 / 35%), transparent 45%);
+  pointer-events: none;
+}
+.cinematic-hero .hero {
+  display: flex;
+  min-height: 610px;
+  padding-block: 70px;
+}
+.cinematic-hero .hero-copy {
+  width: min(590px, 52%);
+}
+.cinematic-hero h1 {
+  color: #fbf7ef;
+  text-wrap: balance;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+.cinematic-hero h1 em,
+.cinematic-hero .eyebrow {
+  color: #e5bf7d;
+}
+.cinematic-hero .small-line {
+  background: #e5bf7d;
+}
+.cinematic-hero .hero-description {
+  color: #e4ded3;
+  max-width: 410px;
+}
+.cinematic-hero .hero-caption p {
+  color: #d5c9b7;
+}
+.cinematic-hero .caption-line {
+  background: #aa8b59;
+}
+.cinematic-hero .button {
+  background: #d6b476;
+  border-color: #d6b476;
+  color: #201a12;
+}
+.cinematic-hero .button:hover {
+  background: #edcd95;
+  border-color: #edcd95;
+}
+.cinematic-hero .text-link {
+  color: #fbf7ef;
+}
+.cinematic-hero .text-link:hover {
+  color: #e5bf7d;
+}
+.cinematic-hero a:focus-visible {
+  outline-color: #f4dba9;
+}
+@keyframes study-reveal {
+  from {
+    transform: scale(1.045);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@media (max-width: 800px) {
+  .cinematic-hero .hero-copy {
+    width: min(540px, 75%);
+  }
+  .cinematic-hero .hero {
+    min-height: 560px;
+    padding-block: 55px;
+  }
+}
+@media (max-width: 600px) {
+  .cinematic-hero .hero {
+    min-height: 590px;
+    padding-block: 50px 65px;
+  }
+  .cinematic-hero .hero-copy {
+    width: 100%;
+  }
+  .cinematic-backdrop img {
+    object-position: center;
+  }
+  .cinematic-hero::before {
+    background:
+      linear-gradient(90deg, rgb(15 13 10 / 87%), rgb(15 13 10 / 58%)),
+      linear-gradient(0deg, rgb(15 13 10 / 45%), transparent 60%);
+  }
+  .cinematic-hero h1 {
+    font-size: clamp(38px, 10vw, 49px);
+  }
+  .cinematic-hero .hero-description {
+    max-width: 350px;
+  }
+  .cinematic-hero .hero-actions {
+    flex-wrap: wrap;
+    gap: 22px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-backdrop img {
+    animation: none;
   }
 }

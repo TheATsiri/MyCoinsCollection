@@ -26,66 +26,53 @@ export default function Home() {
   })
   return (
     <>
-      <section className="hero container">
-        <div className="hero-copy">
-          <p className="eyebrow">
-            <span className="small-line" />
-            {t('HISTORY, HELD IN YOUR HAND')}
-          </p>
-          <h1>
-            {t('Small objects.')}
-            <br />
-            {t('Extraordinary')} <em>{t('stories.')}</em>
-          </h1>
-          <p className="hero-description">
-            {t(
-              'A personal collection of coins, and the places, people and moments they carry. Take a closer look. There’s a world on every side.',
-            )}
-          </p>
-          <div className="hero-actions">
-            <Link className="button" to="/collection">
-              {t('Explore the collection')} <ArrowUpRight size={18} />
-            </Link>
-            <Link className="text-link" to="/about">
-              {t('The story behind it')} <ArrowRight size={17} />
-            </Link>
-          </div>
-          <div className="hero-caption">
-            <span className="caption-line" />
-            <p>
-              {t('A little history. A little artistry.')}
-              <br />
-              {t('A lifetime of curiosity.')}
-            </p>
-          </div>
-        </div>
-        <div className="hero-art">
-          <span className="orbit orbit-one" />
-          <span className="orbit orbit-two" />
-          <span className="art-number">01 / 02</span>
-          <img
-            className="hero-coin hero-coin-back"
-            src="/demo/silver-reverse.svg"
-            alt={t('Original illustrative silver coin artwork')}
-            width="400"
-            height="400"
+      <section className="cinematic-hero">
+        <picture className="cinematic-backdrop" aria-hidden="true">
+          <source
+            media="(max-width: 600px)"
+            srcSet="/images/collector-study-mobile.webp"
           />
           <img
-            className="hero-coin hero-coin-front"
-            src="/demo/euro-obverse.svg"
-            alt={t('Original illustrative bimetallic coin artwork')}
-            width="400"
-            height="400"
+            src="/images/collector-study.webp"
+            alt=""
+            fetchPriority="high"
+            width="2048"
+            height="1152"
           />
-          <div className="art-label">
-            <span className="small-line" />
-            <p>
-              {t('Two sides.')}
-              <br />
-              <strong>{t('One remarkable story.')}</strong>
+        </picture>
+        <div className="hero container">
+          <div className="hero-copy">
+            <p className="eyebrow">
+              <span className="small-line" />
+              {t('HISTORY, HELD IN YOUR HAND')}
             </p>
+            <h1>
+              {t('Small objects.')}
+              <br />
+              {t('Extraordinary')} <em>{t('stories.')}</em>
+            </h1>
+            <p className="hero-description">
+              {t(
+                'A personal collection of coins, and the places, people and moments they carry. Take a closer look. There’s a world on every side.',
+              )}
+            </p>
+            <div className="hero-actions">
+              <Link className="button" to="/collection">
+                {t('Explore the collection')} <ArrowUpRight size={18} />
+              </Link>
+              <Link className="text-link" to="/about">
+                {t('The story behind it')} <ArrowRight size={17} />
+              </Link>
+            </div>
+            <div className="hero-caption">
+              <span className="caption-line" />
+              <p>
+                {t('A little history. A little artistry.')}
+                <br />
+                {t('A lifetime of curiosity.')}
+              </p>
+            </div>
           </div>
-          <span className="art-footnote">{t('ILLUSTRATIVE ARTWORK')}</span>
         </div>
       </section>
       <div className="values-strip">
