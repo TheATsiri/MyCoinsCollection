@@ -1,0 +1,28 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: '17 8 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Ping Supabase database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          curl --fail --silent --show-error \
+            --connect-timeout 10 \
+            --max-time 30 \
+            "${SUPABASE_URL%/}/rest/v1/keep_alive?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_KEY}"
+
+          echo ""
+          echo "Supabase health check successful."
