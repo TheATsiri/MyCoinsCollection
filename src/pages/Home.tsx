@@ -1,5 +1,6 @@
 import CoinCarousel from '../components/CoinCarousel'
 import CinematicCoin from '../components/CinematicCoin'
+import CollectionReviewFeed from '../components/CollectionReviewFeed'
 import { useLanguage } from '../i18n/useLanguage'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
@@ -26,7 +27,7 @@ export default function Home() {
     queryFn: () => listCoins(EMPTY_FILTERS, 'year_desc', 1),
   })
   return (
-    <>
+    <div className="home-layout">
       <section className="cinematic-hero">
         <picture className="cinematic-backdrop" aria-hidden="true">
           <img
@@ -149,6 +150,12 @@ export default function Home() {
         <span>{t('LOOK CLOSELY. STAY CURIOUS.')}</span>
         <ArrowDown size={18} />
       </div>
-    </>
+      <aside
+        className="container weekly-review-feed"
+        aria-labelledby="weekly-reviews-title"
+      >
+        <CollectionReviewFeed lastWeek />
+      </aside>
+    </div>
   )
 }

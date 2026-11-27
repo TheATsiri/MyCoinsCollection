@@ -2024,6 +2024,111 @@ h3 {
   position: absolute;
   inset: 0;
 }
+.weekly-review-feed {
+  padding: 24px;
+  margin-block: 0 32px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fffdf8;
+}
+.weekly-review-feed h2 {
+  font-size: 25px;
+}
+.review-feed-period,
+.review-feed-summary > [role='status'],
+.review-feed-details {
+  color: var(--muted);
+  font-size: 13px;
+}
+.review-feed-summary {
+  margin-block: 12px;
+}
+.weekly-review-feed .review-average {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 36px;
+  line-height: 1.2;
+}
+.weekly-review-feed .review-average svg {
+  color: var(--gold);
+  align-self: center;
+}
+.review-feed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.review-feed-list > li {
+  padding-block: 12px;
+  border-top: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.review-feed-comment {
+  margin-block: 2px 4px;
+  white-space: pre-wrap;
+}
+.weekly-review-feed .review-feed-comment {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.review-feed-details {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+}
+.review-feed-details a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.weekly-review-feed .review-feed-details {
+  flex-wrap: nowrap;
+}
+.weekly-review-feed time {
+  white-space: nowrap;
+}
+.weekly-review-feed .review-feed-details a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.weekly-review-feed .review-feed-button {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.public-review-feed {
+  max-width: 820px;
+}
+@media (min-width: 1101px) {
+  .home-layout {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(48px, 1fr)
+      [content-start] minmax(0, 1240px)
+      [content-end] minmax(48px, 1fr) [full-end];
+  }
+  .home-layout > * {
+    grid-column: full;
+  }
+  .home-layout > .cinematic-hero {
+    grid-row: 1;
+  }
+  .home-layout > .weekly-review-feed {
+    grid-row: 1;
+    grid-column: content;
+    z-index: 1;
+    align-self: center;
+    justify-self: end;
+    width: 320px;
+    margin: 32px 0;
+    box-shadow: 0 12px 44px #110c0866;
+  }
+}
 .coin-reviews .review-distribution > div {
   grid-template-columns: 30px minmax(0, 1fr) 76px;
   gap: 10px;

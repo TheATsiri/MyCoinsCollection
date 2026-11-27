@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Star } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
@@ -6,39 +6,8 @@ import { getReviews, submitReview } from '../lib/reviews'
 import { isDemo } from '../lib/supabase'
 import type { ReviewSort, ReviewSubmission } from '../types/review'
 import ReviewVerification from './ReviewVerification'
+import ReviewStars from './ReviewStars'
 const interpretations = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
-function Stars({ rating }: { rating: number }) {
-  const { t } = useLanguage()
-  const starId = useId().replace(/:/g, '')
-  return (
-    <span
-      className="review-stars"
-      role="img"
-      aria-label={t('{rating} out of 5 stars', { rating })}
-    >
-      {[1, 2, 3, 4, 5].map((n) => (
-        <span className="review-star" key={n} aria-hidden="true">
-          <Star size={20} />
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <defs>
-              <clipPath id={`star-${starId}-${n}`}>
-                <rect
-                  width={24 * Math.max(0, Math.min(1, rating - n + 1))}
-                  height="24"
-                />
-              </clipPath>
-            </defs>
-            <path
-              clipPath={`url(#star-${starId}-${n})`}
-              fill="currentColor"
-              d="m12 3 2.8 5.7 6.3.9-4.6 4.5 1.1 6.3-5.6-3-5.6 3 1.1-6.3L2.9 9.6l6.3-.9Z"
-            />
-          </svg>
-        </span>
-      ))}
-    </span>
-  )
-}
 export default function CoinReviews({ coinId }: { coinId: string }) {
   const { t, language } = useLanguage()
   const [sort, setSort] = useState<ReviewSort>('newest'),
@@ -137,7 +106,7 @@ export default function CoinReviews({ coinId }: { coinId: string }) {
                     }).format(data.average!)}{' '}
                     <small>/ 5</small>
                   </p>
-                  <Stars rating={data.average!} />
+                  <ReviewStars rating={data.average!} />
                   <p className="review-summary-count">
                     {t('{count} ratings', { count: data.total })} ·{' '}
                     {t('{count} written reviews', {
@@ -237,7 +206,7 @@ export default function CoinReviews({ coinId }: { coinId: string }) {
                       </span>
                     </div>
                     <div className="review-card-rating">
-                      <Stars rating={review.rating} />
+                      <ReviewStars rating={review.rating} />
                       <span>{t(interpretations[review.rating - 1])}</span>
                     </div>
                     {review.review_text && (

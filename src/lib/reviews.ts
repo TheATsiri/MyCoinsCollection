@@ -2,11 +2,25 @@ import { isDemo, supabase } from './supabase'
 import { admin } from '../admin/client'
 import type {
   AdminReview,
+  CollectionReviews,
   ReviewPage,
   ReviewSort,
   ReviewStatus,
   ReviewSubmission,
 } from '../types/review'
+export async function getCollectionReviews(
+  lastWeek: boolean,
+  page: number,
+): Promise<CollectionReviews> {
+  if (isDemo) return { items: [], total: 0, average: null }
+  if (!supabase) throw new Error('Reviews are temporarily unavailable')
+  const { data, error } = await supabase.rpc('get_public_reviews', {
+    p_last_week: lastWeek,
+    p_page: page,
+  })
+  if (error) throw error
+  return data as unknown as CollectionReviews
+}
 export async function getReviews(
   coinId: string,
   sort: ReviewSort,

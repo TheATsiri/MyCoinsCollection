@@ -20,6 +20,15 @@ export type ReviewPage = {
   average: number | null
   distribution: Record<string, number>
 }
+export type CollectionReview = PublicReview & {
+  coin_name: string
+  coin_slug: string
+}
+export type CollectionReviews = {
+  items: CollectionReview[]
+  total: number
+  average: number | null
+}
 export type ReviewSubmission = {
   submission_id: string
   coin_id: string

@@ -14,7 +14,7 @@ The owner dashboard links to `/admin/reviews`. Search matches literal substrings
 
 ## Deployment
 
-1. Back up the Supabase database. Apply `003_coin_reviews.sql` after migrations 001 and 002 using the existing SQL Editor workflow or the project's Supabase migration tooling. It adds new objects without changing existing coin records.
+1. Back up the Supabase database. Apply `003_coin_reviews.sql` and `004_public_reviews_feed.sql` in order after migrations 001 and 002 using the existing SQL Editor workflow or the project's Supabase migration tooling. Migration 004 supplies the homepage and public reviews page.
 2. Create a Cloudflare Turnstile widget, registering the production and any preview hostnames. Set public build variable `VITE_TURNSTILE_SITE_KEY`. Keep `VITE_DEMO_MODE=false` for the connected site. Missing configuration disables submissions; demo mode does not persist or fabricate reviews.
 3. Configure Edge Function secrets: `TURNSTILE_SECRET_KEY`, `REVIEW_RATE_SECRET` (a cryptographically random secret of at least 32 bytes), and `REVIEW_ORIGINS` (comma-separated exact frontend origins, without trailing slashes). Existing `SUPABASE_URL` and server-only `SUPABASE_SERVICE_ROLE_KEY` are provided by Supabase. Never put server secrets in Vite variables, Git, or browser code.
 4. Deploy `submit-review` with `supabase functions deploy submit-review`. Its `verify_jwt=false` configuration permits anonymous requests; the function performs mandatory server-side Turnstile checks for hostname and action, validates inputs and origin, and calls the database RPC with a server-only key. Public visitors cannot call that write RPC directly.

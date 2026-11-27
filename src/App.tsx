@@ -13,6 +13,7 @@ import Home from './pages/Home'
 import Collection from './pages/Collection'
 import Details from './pages/Details'
 import About from './pages/About'
+import PublicReviews from './pages/PublicReviews'
 import NotFound from './pages/NotFound'
 function Logo() {
   const { t } = useLanguage()
@@ -74,6 +75,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/collection" element={<Collection />} />
+          <Route path="/reviews" element={<PublicReviews />} />
           <Route
             path="/coins/:slug"
             element={<Details key={location.pathname} />}

@@ -1,5 +1,25 @@
 export type Language = 'en' | 'de' | 'el'
 const entries: [string, string, string][] = [
+  [
+    'Ratings & Reviews – Last Week',
+    'Bewertungen & Rezensionen – Letzte Woche',
+    'Αξιολογήσεις και κριτικές – Τελευταία εβδομάδα',
+  ],
+  ['Last 7 days', 'Letzte 7 Tage', 'Τελευταίες 7 ημέρες'],
+  ['{count} review', '{count} Rezension', '{count} κριτική'],
+  ['{count} reviews', '{count} Rezensionen', '{count} κριτικές'],
+  [
+    'No reviews in the last 7 days',
+    'Keine Rezensionen in den letzten 7 Tagen',
+    'Δεν υπάρχουν κριτικές τις τελευταίες 7 ημέρες',
+  ],
+  [
+    'No reviews yet.',
+    'Noch keine Rezensionen.',
+    'Δεν υπάρχουν ακόμα κριτικές.',
+  ],
+  ['All Reviews', 'Alle Rezensionen', 'Όλες οι κριτικές'],
+  ['View All Reviews', 'Alle Rezensionen ansehen', 'Προβολή όλων των κριτικών'],
   ['Community rating', 'Bewertung der Community', 'Αξιολόγηση της κοινότητας'],
   ['From the community', 'Aus der Community', 'Από την κοινότητα'],
   ['Rating only', 'Nur Sternebewertung', 'Αξιολόγηση χωρίς κείμενο'],

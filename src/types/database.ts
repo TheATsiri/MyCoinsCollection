@@ -1,6 +1,6 @@
 import type { Json, Coin, CoinImage, CoinReference } from './coin'
 import type { AdminReview } from './review'
-// Schema contract for migrations 001–003. After connecting a project, regenerate with the Supabase CLI (README).
+// Schema contract for migrations 001–004. After connecting a project, regenerate with the Supabase CLI (README).
 type Table<T> = {
   Row: T
   Insert: Partial<T>
@@ -35,6 +35,10 @@ export type Database = {
       }
       get_coin_reviews: {
         Args: { p_coin_id: string; p_sort?: string; p_page?: number }
+        Returns: Json
+      }
+      get_public_reviews: {
+        Args: { p_last_week?: boolean; p_page?: number }
         Returns: Json
       }
       is_collection_owner: { Args: Record<string, never>; Returns: boolean }

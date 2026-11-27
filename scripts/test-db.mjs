@@ -51,6 +51,21 @@ try {
       'utf8',
     ),
   )
+  await db.exec(
+    await readFile(
+      new URL(
+        '../supabase/migrations/004_public_reviews_feed.sql',
+        import.meta.url,
+      ),
+      'utf8',
+    ),
+  )
+  await db.exec(
+    await readFile(
+      new URL('../supabase/tests/public_reviews_feed.sql', import.meta.url),
+      'utf8',
+    ),
+  )
   await db.exec(`insert into public.coins(slug,name,issuing_authority,year,is_published)
   select 'test-'||i,'Specimen '||i,'Filterland',2000+i,true from generate_series(1,55) i;
   insert into public.coin_references(coin_id,catalogue,reference_number)
