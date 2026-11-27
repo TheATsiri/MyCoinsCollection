@@ -1,0 +1,40 @@
+name: Automatic CI and Schedule
+
+on:
+  # 1. Runs automatically whenever code is pushed to main
+  push:
+    branches:
+      - main
+
+  # 2. Runs automatically when a pull request targets main
+  pull_request:
+    branches:
+      - main
+
+  # 3. Runs automatically every day at 08:15 UTC
+  schedule:
+    - cron: '15 8 * * *'
+
+  # 4. Lets you click "Run workflow" manually in the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Print run details
+        run: |
+          echo "Triggered by: ${{ github.event_name }}"
+          echo "Branch: ${{ github.ref_name }}"
+          date -u
+
+      - name: Run your script or tests
+        run: |
+          echo "Replace this command with your build, test, or automation script"
