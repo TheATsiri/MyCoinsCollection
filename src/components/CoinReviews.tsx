@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Star } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
 import { getReviews, submitReview } from '../lib/reviews'
@@ -10,6 +10,7 @@ import ReviewStars from './ReviewStars'
 const interpretations = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
 export default function CoinReviews({ coinId }: { coinId: string }) {
   const { t, language } = useLanguage()
+  const queryClient = useQueryClient()
   const [sort, setSort] = useState<ReviewSort>('newest'),
     [page, setPage] = useState(1)
   const [rating, setRating] = useState(0),
@@ -66,6 +67,7 @@ export default function CoinReviews({ coinId }: { coinId: string }) {
       await submitReview(body)
       setSent(true)
       setMessage('Thank you! Your review will appear after approval.')
+      void queryClient.invalidateQueries({ queryKey: ['reviews'] })
     } catch (error) {
       setMessage(
         error instanceof Error

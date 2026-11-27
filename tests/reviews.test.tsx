@@ -41,11 +41,14 @@ function renderWithQuery(ui: React.ReactNode) {
   const client = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   })
-  return render(
-    <QueryClientProvider client={client}>
-      <MemoryRouter>{ui}</MemoryRouter>
-    </QueryClientProvider>,
-  )
+  return {
+    ...render(
+      <QueryClientProvider client={client}>
+        <MemoryRouter>{ui}</MemoryRouter>
+      </QueryClientProvider>,
+    ),
+    client,
+  }
 }
 beforeEach(() => {
   vi.clearAllMocks()
@@ -67,7 +70,9 @@ describe('collector reviews', () => {
   })
   it('submits a keyboard-selected rating-only review against the current coin', async () => {
     const user = userEvent.setup()
-    renderWithQuery(<CoinReviews coinId="coin-a" />)
+    const { client } = renderWithQuery(<CoinReviews coinId="coin-a" />)
+    const homepageKey = ['reviews', 'collection', true, 1]
+    client.setQueryData(homepageKey, { items: [], total: 0, average: null })
     await user.type(screen.getByLabelText('Display name'), 'Collector')
     screen.getByRole('radio', { name: '1 stars — Poor' }).focus()
     // Native radio controls retain browser keyboard behavior; use Space to select.
@@ -89,6 +94,7 @@ describe('collector reviews', () => {
         'Thank you! Your review will appear after approval.',
       ),
     ).toBeVisible()
+    expect(client.getQueryState(homepageKey)?.isInvalidated).toBe(true)
   })
   it('blocks missing ratings and repeated clicks while saving', async () => {
     let finish: () => void = () => {}

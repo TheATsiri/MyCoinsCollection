@@ -20,6 +20,42 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
     created_at: '2026-11-26T12:00:00Z',
   }
   let weeklyItems: (typeof olderReview)[] = []
+  let publishReviewUpdate: (() => void) | undefined
+  await page.routeWebSocket(
+    /reviews-test\.supabase\.co\/realtime\/v1\/websocket/,
+    (socket) => {
+      socket.onMessage((message) => {
+        if (typeof message !== 'string') return
+        const [joinRef, ref, topic, event] = JSON.parse(message)
+        if (event === 'phx_join' || event === 'heartbeat') {
+          socket.send(
+            JSON.stringify([
+              joinRef,
+              ref,
+              topic,
+              'phx_reply',
+              {
+                status: 'ok',
+                response: {},
+              },
+            ]),
+          )
+        }
+        if (event === 'phx_join' && topic === 'realtime:public-collection') {
+          publishReviewUpdate = () =>
+            socket.send(
+              JSON.stringify([
+                joinRef,
+                null,
+                topic,
+                'broadcast',
+                { type: 'broadcast', event: 'refresh', payload: {} },
+              ]),
+            )
+        }
+      })
+    },
+  )
   await page.route('https://reviews-test.supabase.co/**', async (route) => {
     const url = route.request().url()
     if (url.endsWith('/rpc/get_public_reviews')) {
@@ -46,8 +82,14 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
     name: 'Ratings & Reviews – Last Week',
   })
   await expect(sidebar.getByText('No reviews in the last 7 days')).toBeVisible()
-  weeklyItems = [latestReview, olderReview]
+  await expect.poll(() => !!publishReviewUpdate).toBe(true)
+  weeklyItems = [olderReview]
   await page.clock.runFor(30_200)
+  await expect(sidebar.getByText('1 review', { exact: true })).toBeVisible()
+
+  weeklyItems = [latestReview, olderReview]
+  publishReviewUpdate!()
+  await page.clock.runFor(1_000)
   await expect(sidebar.getByText('4.5 / 5')).toBeVisible()
   await expect(sidebar.getByText('2 reviews')).toBeVisible()
   const reviews = sidebar.getByRole('listitem')
