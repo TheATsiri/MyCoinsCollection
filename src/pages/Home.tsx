@@ -90,7 +90,7 @@ export default function Home() {
           </span>
         </div>
       </div>
-      <section className="container section">
+      <section className="container section home-cabinet">
         <div className="section-header">
           <div>
             <p className="eyebrow">{t('THE CABINET')}</p>

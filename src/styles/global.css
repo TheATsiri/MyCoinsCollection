@@ -2107,26 +2107,40 @@ h3 {
 @media (min-width: 1101px) {
   .home-layout {
     display: grid;
-    grid-template-columns:
-      [full-start] minmax(48px, 1fr)
-      [content-start] minmax(0, 1240px)
-      [content-end] minmax(48px, 1fr) [full-end];
-  }
-  .home-layout > * {
-    grid-column: full;
+    grid-template-columns: minmax(48px, 1fr) minmax(0, 1240px) minmax(
+        368px,
+        1fr
+      );
+    grid-template-areas:
+      'hero hero hero'
+      'values values values'
+      '. cabinet reviews'
+      'story story story'
+      'closing closing closing';
   }
   .home-layout > .cinematic-hero {
-    grid-row: 1;
+    grid-area: hero;
+  }
+  .home-layout > .values-strip {
+    grid-area: values;
+  }
+  .home-layout > .home-cabinet {
+    grid-area: cabinet;
+    width: 100%;
+    min-width: 0;
+  }
+  .home-layout > .story-section {
+    grid-area: story;
+  }
+  .home-layout > .closing-line {
+    grid-area: closing;
   }
   .home-layout > .weekly-review-feed {
-    grid-row: 1;
-    grid-column: content;
-    z-index: 1;
-    align-self: center;
-    justify-self: end;
+    grid-area: reviews;
+    align-self: start;
+    justify-self: center;
     width: 320px;
-    margin: 32px 0;
-    box-shadow: 0 12px 44px #110c0866;
+    margin: 65px 0 32px;
   }
 }
 .coin-reviews .review-distribution > div {

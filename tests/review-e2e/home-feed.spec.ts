@@ -60,12 +60,14 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
 
   const panel = (await sidebar.boundingBox())!
   if (isMobile) {
-    const story = (await page.locator('.story-section').boundingBox())!
-    expect(panel.y).toBeGreaterThanOrEqual(story.y + story.height)
+    const closing = (await page.locator('.closing-line').boundingBox())!
+    expect(panel.y).toBeGreaterThanOrEqual(closing.y + closing.height)
   } else {
-    const hero = (await page.getByRole('heading', { level: 1 }).boundingBox())!
-    expect(panel.x).toBeGreaterThan(hero.x + hero.width)
-    expect(panel.y).toBeLessThan((page.viewportSize() ?? { height: 0 }).height)
+    const hero = (await page.locator('.cinematic-hero').boundingBox())!
+    const cabinet = (await page.locator('.home-cabinet').boundingBox())!
+    expect(panel.x).toBeGreaterThan(cabinet.x + cabinet.width)
+    expect(panel.y).toBeGreaterThanOrEqual(hero.y + hero.height)
+    expect(panel.y).toBeLessThan(cabinet.y + cabinet.height)
   }
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth),
