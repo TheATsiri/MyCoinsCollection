@@ -2,7 +2,7 @@
 
 A light museum-style coin catalogue built with React, TypeScript, Vite, and Supabase. The website includes a secure single-owner administration area with coin/photo editing, reviewed reference imports, and live public updates. See [administration setup](docs/administration.md).
 
-## Start locally
+## Start site locally
 
 Requirements: Node.js 24 LTS and npm. Git is already initialized in this folder.
 
