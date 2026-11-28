@@ -6,6 +6,7 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
 }) => {
   const olderReview = {
     id: 'older',
+    display_name: 'Avery',
     rating: 4,
     review_text: 'A helpful catalogue.',
     created_at: '2026-11-25T12:00:00Z',
@@ -15,6 +16,7 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
   const latestReview = {
     ...olderReview,
     id: 'latest',
+    display_name: 'Jordan',
     rating: 5,
     review_text: 'A great collection.',
     created_at: '2026-11-26T12:00:00Z',
@@ -93,6 +95,10 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
   await expect(sidebar.getByText('4.5 / 5')).toBeVisible()
   await expect(sidebar.getByText('2 reviews')).toBeVisible()
   const reviews = sidebar.getByRole('listitem')
+  await expect(
+    reviews.nth(0).getByText('Jordan', { exact: true }),
+  ).toBeVisible()
+  await expect(reviews.nth(1).getByText('Avery', { exact: true })).toBeVisible()
   await expect(reviews.nth(0)).toContainText('A great collection.')
   await expect(reviews.nth(1)).toContainText('A helpful catalogue.')
   await expect(reviews.nth(0).locator('time')).toHaveAttribute(
@@ -118,6 +124,7 @@ test('homepage shows and refreshes weekly ratings and opens all reviews', async 
   await sidebar.getByRole('link', { name: 'View All Reviews' }).click()
   await expect(page).toHaveURL(/\/reviews$/)
   await expect(page.getByRole('heading', { name: 'All Reviews' })).toBeVisible()
+  await expect(page.getByText('Jordan', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Next' }).click()
   await expect(page.getByText('An older review.')).toBeVisible()
 })

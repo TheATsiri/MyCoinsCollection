@@ -69,6 +69,9 @@ export default function CollectionReviewFeed({ lastWeek = false }) {
               {data.items.map((review) => (
                 <li key={review.id}>
                   <ReviewStars rating={review.rating} />
+                  <strong className="review-feed-author">
+                    {review.display_name}
+                  </strong>
                   <p className="review-feed-comment">
                     {review.review_text ?? t('Rating only')}
                   </p>

@@ -2064,6 +2064,12 @@ h3 {
   border-top: 1px solid var(--line);
   overflow-wrap: anywhere;
 }
+.review-feed-author {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.4;
+}
 .review-feed-comment {
   margin-block: 2px 4px;
   white-space: pre-wrap;
